@@ -1,0 +1,26 @@
+{
+  "name": "falcon-eye",
+  "version": "1.0.0",
+  "description": "Javascript Client to send events",
+  "main": "./dist/FalconEye.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/falcon-eye-org/client-js.git"
+  },
+  "keywords": [
+    "falcon",
+    "eye"
+  ],
+  "author": "Falcon eye team",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/falcon-eye-org/client-js/issues"
+  },
+  "homepage": "https://github.com/falcon-eye-org/client-js#readme",
+  "dependencies": {
+    "persistent-typescript": "^1.0.0"
+  }
+}

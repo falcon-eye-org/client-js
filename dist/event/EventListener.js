@@ -39,11 +39,12 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (v !== undefined) module.exports = v;
     }
     else if (typeof define === "function" && define.amd) {
-        define(["require", "exports"], factory);
+        define(["require", "exports", "./ButtonEvent"], factory);
     }
 })(function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
+    var ButtonEvent_1 = require("./ButtonEvent");
     var EventListener = /** @class */ (function () {
         function EventListener(fe) {
             this.falconEye = fe;
@@ -58,7 +59,9 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
                 return __generator(this, function (_a) {
                     window.addEventListener("click", function (ev) {
                         console.log("Click");
-                        console.log(ev);
+                        // console.log(ev);
+                        var be = new ButtonEvent_1.ButtonEvent(ev.screenX, ev.screenY, ev.clientX, ev.clientY, ev.button);
+                        console.log(be);
                     });
                     return [2 /*return*/];
                 });

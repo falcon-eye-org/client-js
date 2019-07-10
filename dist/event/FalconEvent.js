@@ -9,26 +9,34 @@
 })(function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    var Event = /** @class */ (function () {
-        function Event() {
+    var FalconEvent = /** @class */ (function () {
+        function FalconEvent() {
             this.maxScreenX = screen.width;
             this.maxScreenY = screen.height;
             this.maxX = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
             this.maxY = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
+            this.currentPath = window.location.pathname;
+            this.date = new Date();
         }
-        Event.prototype.getMaxScreenX = function () {
+        FalconEvent.prototype.getMaxScreenX = function () {
             return this.maxScreenX;
         };
-        Event.prototype.getMaxScreenY = function () {
+        FalconEvent.prototype.getMaxScreenY = function () {
             return this.maxScreenY;
         };
-        Event.prototype.getMaxX = function () {
+        FalconEvent.prototype.getMaxX = function () {
             return this.maxX;
         };
-        Event.prototype.getMaxY = function () {
+        FalconEvent.prototype.getMaxY = function () {
             return this.maxY;
         };
-        return Event;
+        FalconEvent.prototype.getCurrentPath = function () {
+            return this.currentPath;
+        };
+        FalconEvent.prototype.getDate = function () {
+            return this.date;
+        };
+        return FalconEvent;
     }());
-    exports.Event = Event;
+    exports.FalconEvent = FalconEvent;
 });

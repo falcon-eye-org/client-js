@@ -5,5 +5,5 @@ export declare class EventListener {
     listen(): void;
     private listenClickEvent();
     private listenWheelEvent();
-    private listenKeyboardEvent();
+    private listenKeyboardEvents();
 }

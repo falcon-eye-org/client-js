@@ -1,5 +1,5 @@
-import { ButtonEvent, ButtonType } from "./ButtonEvent";
-export declare class WheelEvent extends ButtonEvent {
+import { FalconButtonEvent, ButtonType } from "./FalconButtonEvent";
+export declare class FalconWheelEvent extends FalconButtonEvent {
     private deltaMode;
     private deltaX;
     private deltaY;

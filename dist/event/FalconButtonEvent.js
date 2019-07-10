@@ -14,21 +14,21 @@ var __extends = (this && this.__extends) || (function () {
         if (v !== undefined) module.exports = v;
     }
     else if (typeof define === "function" && define.amd) {
-        define(["require", "exports", "./Event"], factory);
+        define(["require", "exports", "./FalconEvent"], factory);
     }
 })(function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    var Event_1 = require("./Event");
+    var FalconEvent_1 = require("./FalconEvent");
     var ButtonType;
     (function (ButtonType) {
         ButtonType[ButtonType["LEFT"] = 0] = "LEFT";
         ButtonType[ButtonType["MIDDLE"] = 1] = "MIDDLE";
         ButtonType[ButtonType["RIGHT"] = 2] = "RIGHT";
     })(ButtonType = exports.ButtonType || (exports.ButtonType = {}));
-    var ButtonEvent = /** @class */ (function (_super) {
-        __extends(ButtonEvent, _super);
-        function ButtonEvent(screenX, screenY, x, y, buttonType) {
+    var FalconButtonEvent = /** @class */ (function (_super) {
+        __extends(FalconButtonEvent, _super);
+        function FalconButtonEvent(screenX, screenY, x, y, buttonType) {
             var _this = _super.call(this) || this;
             _this.screenX = screenX;
             _this.screenY = screenY;
@@ -37,22 +37,22 @@ var __extends = (this && this.__extends) || (function () {
             _this.buttonType = buttonType;
             return _this;
         }
-        ButtonEvent.prototype.getScreenX = function () {
+        FalconButtonEvent.prototype.getScreenX = function () {
             return this.screenX;
         };
-        ButtonEvent.prototype.getScreenY = function () {
+        FalconButtonEvent.prototype.getScreenY = function () {
             return this.screenY;
         };
-        ButtonEvent.prototype.getX = function () {
+        FalconButtonEvent.prototype.getX = function () {
             return this.x;
         };
-        ButtonEvent.prototype.getY = function () {
+        FalconButtonEvent.prototype.getY = function () {
             return this.y;
         };
-        ButtonEvent.prototype.getButtonType = function () {
+        FalconButtonEvent.prototype.getButtonType = function () {
             return this.buttonType;
         };
-        return ButtonEvent;
-    }(Event_1.Event));
-    exports.ButtonEvent = ButtonEvent;
+        return FalconButtonEvent;
+    }(FalconEvent_1.FalconEvent));
+    exports.FalconButtonEvent = FalconButtonEvent;
 });

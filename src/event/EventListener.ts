@@ -1,5 +1,7 @@
 import { FalconEye } from "../FalconEye";
-import { ButtonEvent } from "./ButtonEvent";
+import { FalconButtonEvent } from "./FalconButtonEvent";
+import { FalconWheelEvent } from "./FalconWheelEvent";
+import { FalconKeyboardEvent, KeyStatus } from "./FalconKeyboardEvent";
 
 export class EventListener {
 
@@ -12,28 +14,33 @@ export class EventListener {
     public listen(): void {
         this.listenClickEvent();
         this.listenWheelEvent();
-        this.listenKeyboardEvent();
+        this.listenKeyboardEvents();
     }
 
     private async listenClickEvent(): Promise<void> {
         window.addEventListener("click", (ev: MouseEvent) => { // variable 'button' -> 0 left, 2 right, 1 middle
-            console.log(`Click`);
-            let be: ButtonEvent = new ButtonEvent(ev.screenX, ev.screenY, ev.clientX, ev.clientY, ev.button);
-            console.log(be);
+            let be: FalconButtonEvent = new FalconButtonEvent(ev.screenX, ev.screenY, ev.clientX, ev.clientY, ev.button);
+            console.table(be);
         });
     }
 
     private async listenWheelEvent(): Promise<void> {
         window.addEventListener("wheel", (ev: WheelEvent) => {
-            console.log(`Wheel`);
-            console.log(ev);
+            let me: FalconWheelEvent = new FalconWheelEvent(ev.screenX, ev.screenY, ev.clientX, ev.clientY, ev.button,
+                ev.deltaMode, ev.deltaX, ev.deltaY, ev.deltaZ);
+            console.table(me);
+
         });
     }
 
-    private async listenKeyboardEvent(): Promise<void> {
-        window.addEventListener("keydown", (ev: KeyboardEvent) => {
-            console.log(`Key`);
-            console.log(ev);
-        });
+    private async listenKeyboardEvents(): Promise<void> {
+        window.addEventListener("keydown", keyboardHandler);
+        window.addEventListener("keypress", keyboardHandler);
+        window.addEventListener("keyup", keyboardHandler);
+
+        function keyboardHandler(ev: KeyboardEvent) {
+            let ke: FalconKeyboardEvent = new FalconKeyboardEvent(ev.key, ev.code, KeyStatus.KEYDOWN);
+            console.table(ke);
+        }
     }
 }

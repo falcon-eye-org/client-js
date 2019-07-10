@@ -14,7 +14,6 @@ export class EventListener {
     public listen(): void {
         this.listenClickEvent();
         this.listenWheelEvent();
-        this.listenKeyboardEvents();
     }
 
     private async listenClickEvent(): Promise<void> {
@@ -31,16 +30,5 @@ export class EventListener {
             console.table(me);
 
         });
-    }
-
-    private async listenKeyboardEvents(): Promise<void> {
-        window.addEventListener("keydown", keyboardHandler);
-        window.addEventListener("keypress", keyboardHandler);
-        window.addEventListener("keyup", keyboardHandler);
-
-        function keyboardHandler(ev: KeyboardEvent) {
-            let ke: FalconKeyboardEvent = new FalconKeyboardEvent(ev.key, ev.code, KeyStatus.KEYDOWN);
-            console.table(ke);
-        }
     }
 }

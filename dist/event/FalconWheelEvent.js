@@ -14,15 +14,15 @@ var __extends = (this && this.__extends) || (function () {
         if (v !== undefined) module.exports = v;
     }
     else if (typeof define === "function" && define.amd) {
-        define(["require", "exports", "./ButtonEvent"], factory);
+        define(["require", "exports", "./FalconButtonEvent"], factory);
     }
 })(function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    var ButtonEvent_1 = require("./ButtonEvent");
-    var WheelEvent = /** @class */ (function (_super) {
-        __extends(WheelEvent, _super);
-        function WheelEvent(screenX, screenY, x, y, buttonType, deltaMode, deltaX, deltaY, deltaZ) {
+    var FalconButtonEvent_1 = require("./FalconButtonEvent");
+    var FalconWheelEvent = /** @class */ (function (_super) {
+        __extends(FalconWheelEvent, _super);
+        function FalconWheelEvent(screenX, screenY, x, y, buttonType, deltaMode, deltaX, deltaY, deltaZ) {
             var _this = _super.call(this, screenX, screenY, x, y, buttonType) || this;
             _this.deltaMode = deltaMode;
             _this.deltaX = deltaX;
@@ -30,19 +30,19 @@ var __extends = (this && this.__extends) || (function () {
             _this.deltaZ = deltaZ;
             return _this;
         }
-        WheelEvent.prototype.getDeltaMode = function () {
+        FalconWheelEvent.prototype.getDeltaMode = function () {
             return this.deltaMode;
         };
-        WheelEvent.prototype.getDeltaX = function () {
+        FalconWheelEvent.prototype.getDeltaX = function () {
             return this.deltaX;
         };
-        WheelEvent.prototype.getDeltaY = function () {
+        FalconWheelEvent.prototype.getDeltaY = function () {
             return this.deltaY;
         };
-        WheelEvent.prototype.getDeltaZ = function () {
+        FalconWheelEvent.prototype.getDeltaZ = function () {
             return this.deltaZ;
         };
-        return WheelEvent;
-    }(ButtonEvent_1.ButtonEvent));
-    exports.WheelEvent = WheelEvent;
+        return FalconWheelEvent;
+    }(FalconButtonEvent_1.FalconButtonEvent));
+    exports.FalconWheelEvent = FalconWheelEvent;
 });

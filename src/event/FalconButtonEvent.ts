@@ -1,4 +1,4 @@
-import { Event } from "./Event";
+import { FalconEvent } from "./FalconEvent";
 
 export enum ButtonType {
     LEFT,
@@ -6,7 +6,7 @@ export enum ButtonType {
     RIGHT
 }
 
-export class ButtonEvent extends Event {
+export class FalconButtonEvent extends FalconEvent {
     private screenX: number;
     private screenY: number;
     private x: number;

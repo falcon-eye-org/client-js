@@ -39,12 +39,14 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (v !== undefined) module.exports = v;
     }
     else if (typeof define === "function" && define.amd) {
-        define(["require", "exports", "./ButtonEvent"], factory);
+        define(["require", "exports", "./FalconButtonEvent", "./FalconWheelEvent", "./FalconKeyboardEvent"], factory);
     }
 })(function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    var ButtonEvent_1 = require("./ButtonEvent");
+    var FalconButtonEvent_1 = require("./FalconButtonEvent");
+    var FalconWheelEvent_1 = require("./FalconWheelEvent");
+    var FalconKeyboardEvent_1 = require("./FalconKeyboardEvent");
     var EventListener = /** @class */ (function () {
         function EventListener(fe) {
             this.falconEye = fe;
@@ -52,16 +54,14 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         EventListener.prototype.listen = function () {
             this.listenClickEvent();
             this.listenWheelEvent();
-            this.listenKeyboardEvent();
+            this.listenKeyboardEvents();
         };
         EventListener.prototype.listenClickEvent = function () {
             return __awaiter(this, void 0, void 0, function () {
                 return __generator(this, function (_a) {
                     window.addEventListener("click", function (ev) {
-                        console.log("Click");
-                        // console.log(ev);
-                        var be = new ButtonEvent_1.ButtonEvent(ev.screenX, ev.screenY, ev.clientX, ev.clientY, ev.button);
-                        console.log(be);
+                        var be = new FalconButtonEvent_1.FalconButtonEvent(ev.screenX, ev.screenY, ev.clientX, ev.clientY, ev.button);
+                        console.table(be);
                     });
                     return [2 /*return*/];
                 });
@@ -71,20 +71,23 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
             return __awaiter(this, void 0, void 0, function () {
                 return __generator(this, function (_a) {
                     window.addEventListener("wheel", function (ev) {
-                        console.log("Wheel");
-                        console.log(ev);
+                        var me = new FalconWheelEvent_1.FalconWheelEvent(ev.screenX, ev.screenY, ev.clientX, ev.clientY, ev.button, ev.deltaMode, ev.deltaX, ev.deltaY, ev.deltaZ);
+                        console.table(me);
                     });
                     return [2 /*return*/];
                 });
             });
         };
-        EventListener.prototype.listenKeyboardEvent = function () {
+        EventListener.prototype.listenKeyboardEvents = function () {
             return __awaiter(this, void 0, void 0, function () {
+                function keyboardHandler(ev) {
+                    var ke = new FalconKeyboardEvent_1.FalconKeyboardEvent(ev.key, ev.code, FalconKeyboardEvent_1.KeyStatus.KEYDOWN);
+                    console.table(ke);
+                }
                 return __generator(this, function (_a) {
-                    window.addEventListener("keydown", function (ev) {
-                        console.log("Key");
-                        console.log(ev);
-                    });
+                    window.addEventListener("keydown", keyboardHandler);
+                    window.addEventListener("keypress", keyboardHandler);
+                    window.addEventListener("keyup", keyboardHandler);
                     return [2 /*return*/];
                 });
             });

@@ -18,7 +18,7 @@ export class FalconEye {
     public observe(): void {
         if (this.hasStarted)
             return;
-        if (this.config.getApiKey() != this.apiKey) { // If these api key are different, then the profile id is different
+        if (this.config.getApiKey() != this.apiKey) {
             this.config.setApiKey(this.apiKey);
             this.config.setProfileId("");
         }

@@ -18,7 +18,7 @@ export class EventListener {
     }
 
     private async listenClickEvent(): Promise<void> {
-        window.addEventListener("click", (ev: MouseEvent) => { // variable 'button' -> 0 left, 2 right, 1 middle
+        window.addEventListener("click", (ev: MouseEvent) => {
             let be: FalconButtonEvent = new FalconButtonEvent(ev.screenX, ev.screenY, ev.clientX, ev.clientY, ev.button);
             console.table(be);
         });

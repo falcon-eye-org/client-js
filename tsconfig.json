@@ -9,7 +9,7 @@
       "emitDecoratorMetadata": true,
       "outDir": "./dist",
     },
-    "include": ["./src/**/*"],
+    "include": ["./src/*", "./src/event/*"],
     "exclude": [
       "node_modules"
     ]

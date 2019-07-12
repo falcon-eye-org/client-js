@@ -1,6 +1,7 @@
 import { EventListener } from "./event/EventListener";
 import { ConfigProfile } from "./ConfigProfile";
 import { Network } from "./network/Network";
+import { Storage } from "./storage/Storage";
 
 export class FalconEye {
 
@@ -9,6 +10,7 @@ export class FalconEye {
     private eventListener: EventListener;
     private config: ConfigProfile;
     private network: Network;
+    private storage: Storage;
 
     constructor(apiKey: string, address: string) {
         this.apiKey = apiKey;
@@ -16,6 +18,7 @@ export class FalconEye {
         this.eventListener = new EventListener(this);
         this.config = new ConfigProfile();
         this.network = new Network(this, address);
+        this.storage = new Storage(this);
     }
 
     public async observe(): Promise<void> {
@@ -36,6 +39,10 @@ export class FalconEye {
 
     public getConfig(): ConfigProfile {
         return this.config;
+    }
+
+    public getStorage(): Storage {
+        return this.storage;
     }
 }
 

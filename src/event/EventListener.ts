@@ -20,6 +20,7 @@ export class EventListener {
         window.addEventListener("click", (ev: MouseEvent) => {
             let be: FalconButtonEvent = new FalconButtonEvent(ev.screenX, ev.screenY, ev.clientX, ev.clientY, ev.button);
             console.table(be);
+            this.falconEye.getStorage().storeEvent(be);
         });
     }
 

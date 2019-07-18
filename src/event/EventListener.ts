@@ -1,9 +1,8 @@
 import { FalconEye } from "../FalconEye";
-import { FalconButtonEvent } from "./FalconButtonEvent";
-import { FalconWheelEvent } from "./FalconWheelEvent";
-import { FalconKeyboardEvent, KeyStatus } from "./FalconKeyboardEvent";
+import FalconButtonEvent from "./FalconButtonEvent";
+import FalconWheelEvent from "./FalconWheelEvent";
 
-export class EventListener {
+export default class EventListener {
 
     private falconEye: FalconEye;
 

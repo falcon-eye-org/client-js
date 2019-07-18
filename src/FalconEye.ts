@@ -1,5 +1,5 @@
-import { EventListener } from "./event/EventListener";
 import { ConfigProfile } from "./ConfigProfile";
+import EventListener from "./event/EventListener";
 
 export class FalconEye {
 
@@ -18,9 +18,9 @@ export class FalconEye {
     public observe(): void {
         if (this.hasStarted)
             return;
-        if (this.config.getApiKey() != this.apiKey) {
-            this.config.setApiKey(this.apiKey);
-            this.config.setProfileId("");
+        if (this.config.apiKey != this.apiKey) {
+            this.config.apiKey = this.apiKey;
+            this.config.profileId = "";
         }
         this.eventListener.listen();
         this.hasStarted = true;

@@ -1,12 +1,7 @@
-import { FalconEvent } from "./FalconEvent";
+import { KeyStatus } from "./KeyStatus";
+import FalconEvent from "./FalconEvent";
 
-export enum KeyStatus {
-    KEYDOWN,
-    KEYPRESS,
-    KEYUP
-}
-
-export class FalconKeyboardEvent extends FalconEvent {
+export default class FalconKeyboardEvent extends FalconEvent {
 
     private key: string;
     private keycode: string;

@@ -3,27 +3,28 @@ import { Persistent } from "../node_modules/persistent-typescript/build/Persiste
 @Persistent()
 export class ConfigProfile {
 
-    private apiKey: string;
-    private profileId: string;
+    private _apiKey: string;
+    private _profileId: string;
 
     constructor() {
-        this.apiKey = "";
-        this.profileId = "";
+        this._apiKey = "";
+        this._profileId = "";
     }
 
-    public getApiKey(): string {
-        return this.apiKey;
+    get apiKey() {
+        return this._apiKey;
     }
 
-    public getProfileId(): string {
-        return this.profileId;
+    set apiKey(key: string) {
+        this._apiKey = key;
     }
 
-    public setApiKey(apiKey: string): void {
-        this.apiKey = apiKey;
+    get profileId(): string {
+        return this._profileId;
     }
 
-    public setProfileId(profileId: string): void {
-        this.profileId = profileId;
+    set profileId(profileId: string) {
+        this._profileId = profileId;
     }
+
 }

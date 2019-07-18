@@ -1,7 +1,7 @@
 import { FalconEye } from "../FalconEye";
 import * as request from "request-promise";
 
-export class Network {
+export default class Network {
 
     private falconEye: FalconEye;
     private address: string;

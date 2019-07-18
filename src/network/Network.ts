@@ -10,7 +10,7 @@ export default class Network {
     constructor(falconEye: FalconEye, address: string) {
         this.falconEye = falconEye;
         this.address = address;
-        this.profileId = "";
+        this.profileId = falconEye.getConfig().profileId;
     }
 
     public async handshake(): Promise<void> {

@@ -1,5 +1,5 @@
 import { FalconEye } from "../FalconEye";
-import { FalconEvent } from "../event/FalconEvent";
+import FalconEvent from "../event/FalconEvent";
 
 export class Storage {
     private falconEye: FalconEye;

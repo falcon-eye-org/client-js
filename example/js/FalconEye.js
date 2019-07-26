@@ -13,21 +13,29 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var Persistent_1 = require("../node_modules/persistent-typescript/build/Persistent");
 var ConfigProfile = /** @class */ (function () {
     function ConfigProfile() {
-        this.apiKey = "";
-        this.profileId = "";
+        this._apiKey = "";
+        this._profileId = "";
     }
-    ConfigProfile.prototype.getApiKey = function () {
-        return this.apiKey;
-    };
-    ConfigProfile.prototype.getProfileId = function () {
-        return this.profileId;
-    };
-    ConfigProfile.prototype.setApiKey = function (apiKey) {
-        this.apiKey = apiKey;
-    };
-    ConfigProfile.prototype.setProfileId = function (profileId) {
-        this.profileId = profileId;
-    };
+    Object.defineProperty(ConfigProfile.prototype, "apiKey", {
+        get: function () {
+            return this._apiKey;
+        },
+        set: function (key) {
+            this._apiKey = key;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(ConfigProfile.prototype, "profileId", {
+        get: function () {
+            return this._profileId;
+        },
+        set: function (profileId) {
+            this._profileId = profileId;
+        },
+        enumerable: true,
+        configurable: true
+    });
     ConfigProfile = __decorate([
         Persistent_1.Persistent(),
         __metadata("design:paramtypes", [])
@@ -74,17 +82,17 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var EventListener_1 = require("./event/EventListener");
 var ConfigProfile_1 = require("./ConfigProfile");
 var Network_1 = require("./network/Network");
+var EventListener_1 = require("./event/EventListener");
 var Storage_1 = require("./storage/Storage");
 var FalconEye = /** @class */ (function () {
     function FalconEye(apiKey, address) {
         this.apiKey = apiKey;
         this.hasStarted = false;
-        this.eventListener = new EventListener_1.EventListener(this);
+        this.eventListener = new EventListener_1.default(this);
         this.config = new ConfigProfile_1.ConfigProfile();
-        this.network = new Network_1.Network(this, address);
+        this.network = new Network_1.default(this, address);
         this.storage = new Storage_1.Storage(this);
     }
     FalconEye.prototype.observe = function () {
@@ -94,12 +102,12 @@ var FalconEye = /** @class */ (function () {
                     case 0:
                         if (this.hasStarted)
                             return [2 /*return*/];
-                        if (!(this.config.getApiKey() != this.apiKey)) return [3 /*break*/, 2];
+                        if (!(this.config.apiKey != this.apiKey || this.config.profileId.length === 0)) return [3 /*break*/, 2];
                         return [4 /*yield*/, this.network.handshake()];
                     case 1:
                         _a.sent();
-                        this.config.setApiKey(this.apiKey);
-                        this.config.setProfileId(this.network.getProfileId());
+                        this.config.apiKey = this.apiKey;
+                        this.config.profileId = this.network.getProfileId();
                         _a.label = 2;
                     case 2:
                         this.eventListener.listen();
@@ -177,7 +185,7 @@ var EventListener = /** @class */ (function () {
             var _this = this;
             return __generator(this, function (_a) {
                 window.addEventListener("click", function (ev) {
-                    var be = new FalconButtonEvent_1.FalconButtonEvent(ev.screenX, ev.screenY, ev.clientX, ev.clientY, ev.button);
+                    var be = new FalconButtonEvent_1.default(ev.screenX, ev.screenY, ev.clientX, ev.clientY, ev.button);
                     console.table(be);
                     _this.falconEye.getStorage().storeEvent(be);
                 });
@@ -189,7 +197,7 @@ var EventListener = /** @class */ (function () {
         return __awaiter(this, void 0, void 0, function () {
             return __generator(this, function (_a) {
                 window.addEventListener("wheel", function (ev) {
-                    var me = new FalconWheelEvent_1.FalconWheelEvent(ev.screenX, ev.screenY, ev.clientX, ev.clientY, ev.button, ev.deltaMode, ev.deltaX, ev.deltaY, ev.deltaZ);
+                    var me = new FalconWheelEvent_1.default(ev.screenX, ev.screenY, ev.clientX, ev.clientY, ev.button, ev.deltaMode, ev.deltaX, ev.deltaY, ev.deltaZ);
                     console.table(me);
                 });
                 return [2 /*return*/];
@@ -198,7 +206,7 @@ var EventListener = /** @class */ (function () {
     };
     return EventListener;
 }());
-exports.EventListener = EventListener;
+exports.default = EventListener;
 
 },{"./FalconButtonEvent":4,"./FalconWheelEvent":6}],4:[function(require,module,exports){
 "use strict";
@@ -217,12 +225,6 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 var FalconEvent_1 = require("./FalconEvent");
-var ButtonType;
-(function (ButtonType) {
-    ButtonType[ButtonType["LEFT"] = 0] = "LEFT";
-    ButtonType[ButtonType["MIDDLE"] = 1] = "MIDDLE";
-    ButtonType[ButtonType["RIGHT"] = 2] = "RIGHT";
-})(ButtonType = exports.ButtonType || (exports.ButtonType = {}));
 var FalconButtonEvent = /** @class */ (function (_super) {
     __extends(FalconButtonEvent, _super);
     function FalconButtonEvent(screenX, screenY, x, y, buttonType) {
@@ -250,8 +252,8 @@ var FalconButtonEvent = /** @class */ (function (_super) {
         return this.buttonType;
     };
     return FalconButtonEvent;
-}(FalconEvent_1.FalconEvent));
-exports.FalconButtonEvent = FalconButtonEvent;
+}(FalconEvent_1.default));
+exports.default = FalconButtonEvent;
 
 },{"./FalconEvent":5}],5:[function(require,module,exports){
 "use strict";
@@ -285,7 +287,7 @@ var FalconEvent = /** @class */ (function () {
     };
     return FalconEvent;
 }());
-exports.FalconEvent = FalconEvent;
+exports.default = FalconEvent;
 
 },{}],6:[function(require,module,exports){
 "use strict";
@@ -327,8 +329,8 @@ var FalconWheelEvent = /** @class */ (function (_super) {
         return this.deltaZ;
     };
     return FalconWheelEvent;
-}(FalconButtonEvent_1.FalconButtonEvent));
-exports.FalconWheelEvent = FalconWheelEvent;
+}(FalconButtonEvent_1.default));
+exports.default = FalconWheelEvent;
 
 },{"./FalconButtonEvent":4}],7:[function(require,module,exports){
 "use strict";
@@ -373,7 +375,7 @@ var Network = /** @class */ (function () {
     function Network(falconEye, address) {
         this.falconEye = falconEye;
         this.address = address;
-        this.profileId = "";
+        this.profileId = falconEye.getConfig().profileId;
     }
     Network.prototype.handshake = function () {
         return __awaiter(this, void 0, void 0, function () {
@@ -408,7 +410,7 @@ var Network = /** @class */ (function () {
     };
     return Network;
 }());
-exports.Network = Network;
+exports.default = Network;
 
 },{"request-promise":303}],8:[function(require,module,exports){
 "use strict";

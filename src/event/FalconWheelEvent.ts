@@ -1,6 +1,7 @@
-import { FalconButtonEvent, ButtonType } from "./FalconButtonEvent";
+import { ButtonType } from "./ButtonType"
+import FalconButtonEvent from "./FalconButtonEvent";
 
-export class FalconWheelEvent extends FalconButtonEvent {
+export default class FalconWheelEvent extends FalconButtonEvent {
 
     private deltaMode: number;
     private deltaX: number;

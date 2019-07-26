@@ -1,6 +1,6 @@
-import { EventListener } from "./event/EventListener";
 import { ConfigProfile } from "./ConfigProfile";
-import { Network } from "./network/Network";
+import Network from "./network/Network";
+import EventListener from "./event/EventListener";
 import { Storage } from "./storage/Storage";
 
 export class FalconEye {
@@ -24,10 +24,10 @@ export class FalconEye {
     public async observe(): Promise<void> {
         if (this.hasStarted)
             return;
-        if (this.config.getApiKey() != this.apiKey) {
+        if (this.config.apiKey != this.apiKey || this.config.profileId.length === 0) {
             await this.network.handshake();
-            this.config.setApiKey(this.apiKey);
-            this.config.setProfileId(this.network.getProfileId());
+            this.config.apiKey = this.apiKey;
+            this.config.profileId = this.network.getProfileId();
         }
         this.eventListener.listen();
         this.hasStarted = true;

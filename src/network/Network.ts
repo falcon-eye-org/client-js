@@ -1,7 +1,7 @@
 import { FalconEye } from "../FalconEye";
 import * as request from "request-promise";
 
-export class Network {
+export default class Network {
 
     private falconEye: FalconEye;
     private address: string;
@@ -10,7 +10,7 @@ export class Network {
     constructor(falconEye: FalconEye, address: string) {
         this.falconEye = falconEye;
         this.address = address;
-        this.profileId = "";
+        this.profileId = falconEye.getConfig().profileId;
     }
 
     public async handshake(): Promise<void> {

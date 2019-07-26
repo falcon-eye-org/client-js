@@ -1,12 +1,7 @@
-import { FalconEvent } from "./FalconEvent";
+import { ButtonType } from "./ButtonType";
+import FalconEvent from "./FalconEvent";
 
-export enum ButtonType {
-    LEFT,
-    MIDDLE,
-    RIGHT
-}
-
-export class FalconButtonEvent extends FalconEvent {
+export default class FalconButtonEvent extends FalconEvent {
     private screenX: number;
     private screenY: number;
     private x: number;

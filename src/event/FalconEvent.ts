@@ -1,4 +1,4 @@
-export class FalconEvent {
+export default class FalconEvent {
     private maxScreenX: number;
     private maxScreenY: number;
     private maxX: number;

@@ -41,11 +41,15 @@ export class FalconEye {
         return this.config;
     }
 
+    public getNetwork(): Network {
+        return this.network;
+    }
+
     public getStorage(): Storage {
         return this.storage;
     }
 }
 
-let fe: FalconEye = new FalconEye("adkfdsnfsnfdjnfdsjfsfssfd", "http://localhost:3000/");
+let fe: FalconEye = new FalconEye("KEY", "http://localhost:3000/");
 
 fe.observe();

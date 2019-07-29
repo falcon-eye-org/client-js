@@ -28,7 +28,7 @@ export default class EventListener {
             let me: FalconWheelEvent = new FalconWheelEvent(ev.screenX, ev.screenY, ev.clientX, ev.clientY, ev.button,
                 ev.deltaMode, ev.deltaX, ev.deltaY, ev.deltaZ);
             console.table(me);
-
+            this.falconEye.getStorage().storeEvent(me);
         });
     }
 }

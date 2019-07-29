@@ -20,16 +20,40 @@ export default class Network {
             method: 'POST',
             uri: this.address + (this.address.slice(-1) === '/' ? "" : "/") +  "connect/",
             body: {
-                apikey: this.falconEye.getAPIKey()
+                apiKey: this.falconEye.getAPIKey()
             },
             json: true
         })
         .then((parsedBody: any) => {
-            This.profileId = parsedBody.profileid;
+            This.profileId = parsedBody.data.session;
         })
         .catch((err: any) => {
             console.error("[FalconEye] Failed to handshake the server ! " + err);
         });
+    }
+
+    public async sendEvents(eventArray: any[]): Promise<boolean> {
+        let status: boolean = false;
+
+        await request({
+            method: 'POST',
+            uri: this.address + (this.address.slice(-1) === '/' ? "" : "/") +  "event/",
+            headers: {
+                authorization: this.falconEye.getConfig().profileId
+            },
+            body: {
+                event: eventArray
+            },
+            json: true
+        })
+        .then((parsedBody: any) => {
+            status = true;
+        })
+        .catch((err: any) => {
+            console.error("[FalconEye] Failed to send the events to the server ! " + err);
+            status = false;
+        });
+        return status;
     }
 
     public getProfileId(): string {

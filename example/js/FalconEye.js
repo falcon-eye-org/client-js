@@ -123,13 +123,16 @@ var FalconEye = /** @class */ (function () {
     FalconEye.prototype.getConfig = function () {
         return this.config;
     };
+    FalconEye.prototype.getNetwork = function () {
+        return this.network;
+    };
     FalconEye.prototype.getStorage = function () {
         return this.storage;
     };
     return FalconEye;
 }());
 exports.FalconEye = FalconEye;
-var fe = new FalconEye("adkfdsnfsnfdjnfdsjfsfssfd", "http://localhost:3000/");
+var fe = new FalconEye("KEY", "http://localhost:3000/");
 fe.observe();
 
 },{"./ConfigProfile":1,"./event/EventListener":3,"./network/Network":7,"./storage/Storage":8}],3:[function(require,module,exports){
@@ -195,10 +198,12 @@ var EventListener = /** @class */ (function () {
     };
     EventListener.prototype.listenWheelEvent = function () {
         return __awaiter(this, void 0, void 0, function () {
+            var _this = this;
             return __generator(this, function (_a) {
                 window.addEventListener("wheel", function (ev) {
                     var me = new FalconWheelEvent_1.default(ev.screenX, ev.screenY, ev.clientX, ev.clientY, ev.button, ev.deltaMode, ev.deltaX, ev.deltaY, ev.deltaZ);
                     console.table(me);
+                    _this.falconEye.getStorage().storeEvent(me);
                 });
                 return [2 /*return*/];
             });
@@ -388,12 +393,12 @@ var Network = /** @class */ (function () {
                                 method: 'POST',
                                 uri: this.address + (this.address.slice(-1) === '/' ? "" : "/") + "connect/",
                                 body: {
-                                    apikey: this.falconEye.getAPIKey()
+                                    apiKey: this.falconEye.getAPIKey()
                                 },
                                 json: true
                             })
                                 .then(function (parsedBody) {
-                                This.profileId = parsedBody.profileid;
+                                This.profileId = parsedBody.data.session;
                             })
                                 .catch(function (err) {
                                 console.error("[FalconEye] Failed to handshake the server ! " + err);
@@ -401,6 +406,38 @@ var Network = /** @class */ (function () {
                     case 1:
                         _a.sent();
                         return [2 /*return*/];
+                }
+            });
+        });
+    };
+    Network.prototype.sendEvents = function (eventArray) {
+        return __awaiter(this, void 0, void 0, function () {
+            var status;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        status = false;
+                        return [4 /*yield*/, request({
+                                method: 'POST',
+                                uri: this.address + (this.address.slice(-1) === '/' ? "" : "/") + "event/",
+                                headers: {
+                                    authorization: this.falconEye.getConfig().profileId
+                                },
+                                body: {
+                                    event: eventArray
+                                },
+                                json: true
+                            })
+                                .then(function (parsedBody) {
+                                status = true;
+                            })
+                                .catch(function (err) {
+                                console.error("[FalconEye] Failed to send the events to the server ! " + err);
+                                status = false;
+                            })];
+                    case 1:
+                        _a.sent();
+                        return [2 /*return*/, status];
                 }
             });
         });
@@ -415,19 +452,30 @@ exports.default = Network;
 },{"request-promise":303}],8:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+var FalconButtonEvent_1 = require("../event/FalconButtonEvent");
+var FalconWheelEvent_1 = require("../event/FalconWheelEvent");
 var Storage = /** @class */ (function () {
     function Storage(falconEye) {
         this.falconEye = falconEye;
+        this.packets = [];
     }
     Storage.prototype.storeEvent = function (event) {
-        // if (typeof event == )
-        console.log(typeof event);
+        if (this.packets.length >= 5) {
+            this.falconEye.getNetwork().sendEvents(this.packets);
+            this.packets = [];
+        }
+        if (event instanceof FalconWheelEvent_1.default) {
+            this.packets.push({ type: "wheel", data: event });
+        }
+        else if (event instanceof FalconButtonEvent_1.default) {
+            this.packets.push({ type: "button", data: event });
+        }
     };
     return Storage;
 }());
 exports.Storage = Storage;
 
-},{}],9:[function(require,module,exports){
+},{"../event/FalconButtonEvent":4,"../event/FalconWheelEvent":6}],9:[function(require,module,exports){
 'use strict';
 
 var compileSchema = require('./compile')

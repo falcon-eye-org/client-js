@@ -25,9 +25,9 @@ export class FalconEye {
         if (this.hasStarted)
             return;
         if (this.config.apiKey != this.apiKey || this.config.profileId.length === 0) {
-            await this.network.handshake();
             this.config.apiKey = this.apiKey;
-            this.config.profileId = this.network.getProfileId();
+            this.config.profileId = "";
+            await this.network.handshake();
         }
         this.eventListener.listen();
         this.hasStarted = true;

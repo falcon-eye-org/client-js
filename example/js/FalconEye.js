@@ -103,11 +103,11 @@ var FalconEye = /** @class */ (function () {
                         if (this.hasStarted)
                             return [2 /*return*/];
                         if (!(this.config.apiKey != this.apiKey || this.config.profileId.length === 0)) return [3 /*break*/, 2];
+                        this.config.apiKey = this.apiKey;
+                        this.config.profileId = "";
                         return [4 /*yield*/, this.network.handshake()];
                     case 1:
                         _a.sent();
-                        this.config.apiKey = this.apiKey;
-                        this.config.profileId = this.network.getProfileId();
                         _a.label = 2;
                     case 2:
                         this.eventListener.listen();
@@ -117,9 +117,6 @@ var FalconEye = /** @class */ (function () {
             });
         });
     };
-    // public getAPIKey(): string {
-    //     return this.apiKey;
-    // }
     FalconEye.prototype.getConfig = function () {
         return this.config;
     };
@@ -379,34 +376,26 @@ var request = require("request-promise");
 var Network = /** @class */ (function () {
     function Network(falconEye, address) {
         this.falconEye = falconEye;
-        this.address = address;
-        this.profileId = falconEye.getConfig().profileId;
+        this.address = address + (address.slice(-1) === '/' ? "" : "/");
     }
     Network.prototype.handshake = function () {
         return __awaiter(this, void 0, void 0, function () {
-            var This;
+            var _this = this;
             return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
-                        This = this;
-                        return [4 /*yield*/, request({
-                                method: 'POST',
-                                uri: this.address + (this.address.slice(-1) === '/' ? "" : "/") + "connect/",
-                                body: {
-                                    apiKey: this.falconEye.getConfig().apiKey
-                                },
-                                json: true
-                            })
-                                .then(function (parsedBody) {
-                                This.profileId = parsedBody.data.session;
-                            })
-                                .catch(function (err) {
-                                console.error("[FalconEye] Failed to handshake the server ! " + err);
-                            })];
-                    case 1:
-                        _a.sent();
-                        return [2 /*return*/];
-                }
+                return [2 /*return*/, request({
+                        method: 'POST',
+                        uri: this.address + "connect/",
+                        body: {
+                            apiKey: this.falconEye.getConfig().apiKey
+                        },
+                        json: true
+                    })
+                        .then(function (parsedBody) {
+                        _this.falconEye.getConfig().profileId = parsedBody.data.session;
+                    })
+                        .catch(function (err) {
+                        console.error("[FalconEye] Failed to handshake the server ! " + err);
+                    })];
             });
         });
     };
@@ -419,7 +408,7 @@ var Network = /** @class */ (function () {
                         status = false;
                         return [4 /*yield*/, request({
                                 method: 'POST',
-                                uri: this.address + (this.address.slice(-1) === '/' ? "" : "/") + "event/",
+                                uri: this.address + "event/",
                                 headers: {
                                     authorization: this.falconEye.getConfig().profileId
                                 },
@@ -430,6 +419,8 @@ var Network = /** @class */ (function () {
                             })
                                 .then(function (parsedBody) {
                                 status = true;
+                                console.log("Status ok");
+                                console.log(parsedBody);
                             })
                                 .catch(function (err) {
                                 console.error("[FalconEye] Failed to send the events to the server ! " + err);
@@ -441,9 +432,6 @@ var Network = /** @class */ (function () {
                 }
             });
         });
-    };
-    Network.prototype.getProfileId = function () {
-        return this.profileId;
     };
     return Network;
 }());

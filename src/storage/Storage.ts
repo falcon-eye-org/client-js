@@ -2,6 +2,7 @@ import { FalconEye } from "../FalconEye";
 import FalconEvent from "../event/FalconEvent";
 import FalconButtonEvent from "../event/FalconButtonEvent";
 import FalconWheelEvent from "../event/FalconWheelEvent";
+import Network from "../network/Network";
 
 export class Storage {
     private falconEye: FalconEye;

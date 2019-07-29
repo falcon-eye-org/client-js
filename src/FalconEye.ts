@@ -33,10 +33,6 @@ export class FalconEye {
         this.hasStarted = true;
     }
 
-    public getAPIKey(): string {
-        return this.apiKey;
-    }
-
     public getConfig(): ConfigProfile {
         return this.config;
     }

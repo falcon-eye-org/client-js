@@ -117,9 +117,9 @@ var FalconEye = /** @class */ (function () {
             });
         });
     };
-    FalconEye.prototype.getAPIKey = function () {
-        return this.apiKey;
-    };
+    // public getAPIKey(): string {
+    //     return this.apiKey;
+    // }
     FalconEye.prototype.getConfig = function () {
         return this.config;
     };
@@ -393,7 +393,7 @@ var Network = /** @class */ (function () {
                                 method: 'POST',
                                 uri: this.address + (this.address.slice(-1) === '/' ? "" : "/") + "connect/",
                                 body: {
-                                    apiKey: this.falconEye.getAPIKey()
+                                    apiKey: this.falconEye.getConfig().apiKey
                                 },
                                 json: true
                             })

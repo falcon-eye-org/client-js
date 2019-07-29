@@ -20,7 +20,7 @@ export default class Network {
             method: 'POST',
             uri: this.address + (this.address.slice(-1) === '/' ? "" : "/") +  "connect/",
             body: {
-                apiKey: this.falconEye.getAPIKey()
+                apiKey: this.falconEye.getConfig().apiKey
             },
             json: true
         })

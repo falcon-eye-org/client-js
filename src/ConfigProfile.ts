@@ -1,4 +1,4 @@
-import { Persistent } from "../node_modules/persistent-typescript/build/Persistent";
+import { Persistent } from "persistent-typescript";
 
 @Persistent()
 export class ConfigProfile {

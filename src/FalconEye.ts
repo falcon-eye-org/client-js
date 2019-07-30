@@ -27,7 +27,10 @@ export class FalconEye {
         if (this.config.apiKey != this.apiKey || this.config.profileId.length === 0) {
             this.config.apiKey = this.apiKey;
             this.config.profileId = "";
-            await this.network.handshake();
+            if (await this.network.handshake() == false) {
+                this.config.apiKey = "";
+                return;
+            }
         }
         this.eventListener.listen();
         this.hasStarted = true;
@@ -49,3 +52,4 @@ export class FalconEye {
 let fe: FalconEye = new FalconEye("KEY", "http://localhost:3000/");
 
 fe.observe();
+

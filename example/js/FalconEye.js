@@ -10,7 +10,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var Persistent_1 = require("../node_modules/persistent-typescript/build/Persistent");
+var persistent_typescript_1 = require("persistent-typescript");
 var ConfigProfile = /** @class */ (function () {
     function ConfigProfile() {
         this._apiKey = "";
@@ -37,14 +37,14 @@ var ConfigProfile = /** @class */ (function () {
         configurable: true
     });
     ConfigProfile = __decorate([
-        Persistent_1.Persistent(),
+        persistent_typescript_1.Persistent(),
         __metadata("design:paramtypes", [])
     ], ConfigProfile);
     return ConfigProfile;
 }());
 exports.ConfigProfile = ConfigProfile;
 
-},{"../node_modules/persistent-typescript/build/Persistent":264}],2:[function(require,module,exports){
+},{"persistent-typescript":264}],2:[function(require,module,exports){
 "use strict";
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -107,7 +107,10 @@ var FalconEye = /** @class */ (function () {
                         this.config.profileId = "";
                         return [4 /*yield*/, this.network.handshake()];
                     case 1:
-                        _a.sent();
+                        if ((_a.sent()) == false) {
+                            this.config.apiKey = "";
+                            return [2 /*return*/];
+                        }
                         _a.label = 2;
                     case 2:
                         this.eventListener.listen();
@@ -391,45 +394,55 @@ var Network = /** @class */ (function () {
                         json: true
                     })
                         .then(function (parsedBody) {
-                        _this.falconEye.getConfig().profileId = parsedBody.data.session;
+                        var code = parsedBody.code;
+                        if (code === "00") {
+                            _this.falconEye.getConfig().profileId = parsedBody.data.session;
+                            return true;
+                        }
+                        else if (code === "01") {
+                            console.error("[FalconEye] The specified API-KEY is not valid !");
+                        }
+                        else {
+                            console.error("[FalconEye] This shouldn't happen");
+                        }
+                        return false;
                     })
                         .catch(function (err) {
                         console.error("[FalconEye] Failed to handshake the server ! " + err);
+                        return false;
                     })];
             });
         });
     };
     Network.prototype.sendEvents = function (eventArray) {
         return __awaiter(this, void 0, void 0, function () {
-            var status;
             return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
-                        status = false;
-                        return [4 /*yield*/, request({
-                                method: 'POST',
-                                uri: this.address + "event/",
-                                headers: {
-                                    authorization: this.falconEye.getConfig().profileId
-                                },
-                                body: {
-                                    event: eventArray
-                                },
-                                json: true
-                            })
-                                .then(function (parsedBody) {
-                                status = true;
-                                console.log("Status ok");
-                                console.log(parsedBody);
-                            })
-                                .catch(function (err) {
-                                console.error("[FalconEye] Failed to send the events to the server ! " + err);
-                                status = false;
-                            })];
-                    case 1:
-                        _a.sent();
-                        return [2 /*return*/, status];
-                }
+                return [2 /*return*/, request({
+                        method: 'POST',
+                        uri: this.address + "event/",
+                        headers: {
+                            authorization: this.falconEye.getConfig().profileId
+                        },
+                        body: {
+                            event: eventArray
+                        },
+                        json: true
+                    })
+                        .then(function (parsedBody) {
+                        var code = parsedBody.code;
+                        console.log(parsedBody);
+                        if (code === "00") {
+                            return true;
+                        }
+                        else if (code === "02") {
+                            console.error("[FalconEye] You are not authenticated");
+                        }
+                        return false;
+                    })
+                        .catch(function (err) {
+                        console.error("[FalconEye] Failed to send the events to the server ! " + err);
+                        return false;
+                    })];
             });
         });
     };
@@ -54646,417 +54659,400 @@ module.exports = pbkdf2
 
 }).call(this,require('_process'))
 },{"_process":270}],264:[function(require,module,exports){
-(function (factory) {
-    if (typeof module === "object" && typeof module.exports === "object") {
-        var v = factory(require, exports);
-        if (v !== undefined) module.exports = v;
-    }
-    else if (typeof define === "function" && define.amd) {
-        define(["require", "exports", "reflect-metadata", "./Storage", "./plugin/JsonPlugin"], factory);
-    }
-})(function (require, exports) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-    require("reflect-metadata");
-    var Storage_1 = require("./Storage");
-    var JsonPlugin_1 = require("./plugin/JsonPlugin");
-    ;
-    /**
-     * Default persistent option. It uses json to load/save (json is not minified)
-     */
-    function defaultOptions() {
-        return {
-            plugin: new JsonPlugin_1.JsonPlugin(false),
-            path: ".persistent.json"
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+require("reflect-metadata");
+var Storage_1 = require("./Storage");
+var JsonPlugin_1 = require("./plugin/JsonPlugin");
+var Utils_1 = require("./utils/Utils");
+;
+/**
+ * Default persistent option. It uses json to load/save (json is not minified)
+ */
+function defaultOptions() {
+    return {
+        plugin: new JsonPlugin_1.JsonPlugin(false),
+        path: ".persistent.json",
+        debug: false
+    };
+}
+/**
+ * This decorator permits to tell the lib to save and load your class.
+ * @param options Persistent option, with theses options you can choose your saver, loader and the path to the file
+ */
+function Persistent(options) {
+    if (options === void 0) { options = defaultOptions(); }
+    return function (target) {
+        var original = target;
+        /**
+         * Create a class instance
+         * @param constructor class' constructor
+         * @param args args' constructor
+         */
+        function construct(constructor) {
+            var args = [];
+            for (var _i = 1; _i < arguments.length; _i++) {
+                args[_i - 1] = arguments[_i];
+            }
+            var c = function () {
+                //@ts-ignore
+                return constructor.apply(this, args);
+            };
+            c.prototype = constructor.prototype;
+            return new c();
+        }
+        // The new instance
+        var f = function () {
+            var args = [];
+            for (var _i = 0; _i < arguments.length; _i++) {
+                args[_i] = arguments[_i];
+            }
+            var instance = construct(original, args);
+            var className = Utils_1.Utils.getClassName(instance);
+            if (className != null) {
+                var classLoaded = Storage_1.storage.getInstanceOfClass(className, options);
+                if (classLoaded != null)
+                    return classLoaded;
+            }
+            Storage_1.storage.store(instance, options);
+            return instance;
         };
+        f.prototype = original.prototype;
+        return f;
+    };
+}
+exports.Persistent = Persistent;
+
+},{"./Storage":265,"./plugin/JsonPlugin":266,"./utils/Utils":268,"reflect-metadata":299}],265:[function(require,module,exports){
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+var Utils_1 = require("./utils/Utils");
+var Map_1 = require("./utils/Map");
+var fs = require("fs");
+var process = require("process");
+var path = require("path");
+var Storage = /** @class */ (function () {
+    function Storage() {
+        var This = this;
+        this.persistentObjects = new Map_1.Map();
+        this.persistentObjectsMetadata = new Map_1.Map();
+        if (Utils_1.Utils.isBrowser()) {
+            window.addEventListener("unload", function (event) {
+                This.save();
+            });
+        }
+        else {
+            process.on('SIGINT', function () {
+                This.save();
+                process.exit();
+            });
+            process.on('SIGHUP', function () {
+                This.save();
+                process.exit();
+            });
+            process.on('SIGQUIT', function () {
+                This.save();
+                process.exit();
+            });
+            process.on('SIGTERM', function () {
+                This.save();
+                process.exit();
+            });
+            process.on('uncaughtException', function () {
+                This.save();
+                process.exit();
+            });
+            process.on('exit', function () {
+                This.save();
+                process.exit();
+            });
+        }
     }
     /**
-     * This decorator permits to tell the lib to save and load your class.
+     * Loads a persistent file to retrieve the classes information stored in it
+     * @param options Persistent option, with theses options you can choose your saver, loader and the path to the file
+     * @param force Force to reload the file
+     */
+    Storage.prototype.loadPersistentFile = function (options, force) {
+        try {
+            var filePath = path.resolve(options.path);
+            var data = void 0;
+            if (this.persistentObjects.containsKey(filePath) == true && !force)
+                return;
+            this.persistentObjects.put(filePath, options.plugin.init());
+            this.persistentObjectsMetadata.put(filePath, options);
+            if (Utils_1.Utils.isBrowser())
+                data = localStorage.getItem(filePath);
+            else
+                data = fs.readFileSync(filePath, "utf8");
+            if (data == null)
+                return;
+            this.persistentObjects.put(filePath, options.plugin.deserialize(data));
+            this.persistentObjectsMetadata.put(filePath, options);
+        }
+        catch (err) {
+            if (options.debug) {
+                console.log("Failed to load the persistent file '" + options.path + "'");
+                console.log("Error: " + err);
+            }
+        }
+    };
+    /**
+     * Stores the class instance to the storage
+     * @param classInstance class instance to store
      * @param options Persistent option, with theses options you can choose your saver, loader and the path to the file
      */
-    function Persistent(options) {
-        if (options === void 0) { options = defaultOptions(); }
-        return function (target) {
-            var original = target;
-            /**
-             * Create a class instance
-             * @param constructor class' constructor
-             * @param args args' constructor
-             */
-            function construct(constructor) {
-                var args = [];
-                for (var _i = 1; _i < arguments.length; _i++) {
-                    args[_i - 1] = arguments[_i];
-                }
-                var c = function () {
-                    //@ts-ignore
-                    return constructor.apply(this, args);
-                };
-                c.prototype = constructor.prototype;
-                return new c();
+    Storage.prototype.store = function (classInstance, options) {
+        this.loadPersistentFile(options, false);
+        var className = Utils_1.Utils.getClassName(classInstance);
+        var filePath = path.resolve(options.path);
+        if (className == null)
+            return;
+        var savedClass = options.plugin.get(this.persistentObjects.getValue(filePath), className);
+        if (savedClass != null) {
+            for (var field in savedClass) {
+                classInstance[field] = savedClass[field];
             }
-            // The new instance
-            var f = function () {
-                var args = [];
-                for (var _i = 0; _i < arguments.length; _i++) {
-                    args[_i] = arguments[_i];
-                }
-                var instance = construct(original, args);
-                Storage_1.storage.store(instance, options);
-                return instance;
-            };
-            f.prototype = original.prototype;
-            return f;
-        };
-    }
-    exports.Persistent = Persistent;
-});
-
-},{"./Storage":265,"./plugin/JsonPlugin":266,"reflect-metadata":299}],265:[function(require,module,exports){
-(function (factory) {
-    if (typeof module === "object" && typeof module.exports === "object") {
-        var v = factory(require, exports);
-        if (v !== undefined) module.exports = v;
-    }
-    else if (typeof define === "function" && define.amd) {
-        define(["require", "exports", "./utils/Utils", "./utils/Map", "fs", "process", "path"], factory);
-    }
-})(function (require, exports) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-    var Utils_1 = require("./utils/Utils");
-    var Map_1 = require("./utils/Map");
-    var fs = require("fs");
-    var process = require("process");
-    var path = require("path");
-    var Storage = /** @class */ (function () {
-        function Storage() {
-            var This = this;
-            this.persistentObjects = new Map_1.Map();
-            this.persistentObjectsMetadata = new Map_1.Map();
-            if (Utils_1.Utils.isBrowser()) {
-                window.addEventListener("unload", function (event) {
-                    This.save();
-                });
-            }
-            else {
-                process.on('SIGINT', function () {
-                    This.save();
-                });
-                process.on('SIGHUP', function () {
-                    This.save();
-                });
-                process.on('SIGQUIT', function () {
-                    This.save();
-                });
-                process.on('SIGTERM', function () {
-                    This.save();
-                });
-                process.on('uncaughtException', function () {
-                    This.save();
-                });
-                process.on('exit', function () {
-                    This.save();
-                });
-            }
-            console.log("[Persistent] Initialization done !");
         }
-        /**
-         * Loads a persistent file to retrieve the classes information stored in it
-         * @param options Persistent option, with theses options you can choose your saver, loader and the path to the file
-         * @param force Force to reload the file
-         */
-        Storage.prototype.loadPersistentFile = function (options, force) {
-            try {
-                if (this.persistentObjects.containsKey(path.resolve(options.path)) == true && !force)
-                    return;
-                this.persistentObjects.put(path.resolve(options.path), options.plugin.init());
-                this.persistentObjectsMetadata.put(path.resolve(options.path), options);
-                var data = null;
-                if (Utils_1.Utils.isBrowser()) {
-                    data = localStorage.getItem(path.resolve(options.path));
-                }
-                else {
-                    data = fs.readFileSync(path.resolve(options.path), "utf8");
-                }
-                if (data == null || data === undefined)
-                    return;
-                this.persistentObjects.put(path.resolve(options.path), options.plugin.deserialize(data));
-                this.persistentObjectsMetadata.put(path.resolve(options.path), options);
-            }
-            catch (err) {
-            }
-        };
-        /**
-         * Stores the class instance to the storage
-         * @param classInstance class instance to store
-         * @param options Persistent option, with theses options you can choose your saver, loader and the path to the file
-         */
-        Storage.prototype.store = function (classInstance, options) {
-            this.loadPersistentFile(options, false);
-            var className = Utils_1.Utils.getClassName(classInstance);
-            if (className == null)
-                return;
-            var savedClass = options.plugin.get(this.persistentObjects.getValue(path.resolve(options.path)), className);
-            if (savedClass != null) {
-                for (var field in savedClass) {
-                    classInstance[field] = savedClass[field];
-                }
-            }
-            options.plugin.put(this.persistentObjects.getValue(path.resolve(options.path)), className, classInstance);
-        };
-        /**
-         * Saves all classes stored in the storage using the plugin specified
-         */
-        Storage.prototype.save = function () {
-            console.log("[Persistent] Saving classes ...");
-            for (var _i = 0, _a = this.persistentObjects.keys(); _i < _a.length; _i++) {
-                var key = _a[_i];
-                if (Utils_1.Utils.isBrowser()) {
-                    localStorage.setItem(key, this.persistentObjectsMetadata.getValue(key).plugin.serialize(this.persistentObjects.getValue(key)));
-                }
-                else {
-                    fs.writeFileSync(key, this.persistentObjectsMetadata.getValue(key).plugin.serialize(this.persistentObjects.getValue(key)));
-                }
-            }
-            console.log("[Persistent] Done !");
-        };
-        /**
-         * Returns the number of class saved
-         */
-        Storage.prototype.getSize = function () {
-            return this.persistentObjects.size();
-        };
-        return Storage;
-    }());
-    exports.Storage = Storage;
-    ;
-    //@ts-ignore
-    if (exports.storage == undefined) {
-        exports.storage = new Storage();
-    }
-});
+        options.plugin.put(this.persistentObjects.getValue(filePath), className, classInstance);
+    };
+    /**
+     * Retrieves a class instance by its name and its options
+     * @param className class name
+     * @param options Persistent option, with theses options you can choose your saver, loader and the path to the file
+     */
+    Storage.prototype.getInstanceOfClass = function (className, options) {
+        var savedClass = options.plugin.get(this.persistentObjects.getValue(path.resolve(options.path)), className);
+        return savedClass;
+    };
+    /**
+     * Saves all classes stored in the storage using the plugin specified
+     */
+    Storage.prototype.save = function () {
+        var option;
+        var instance;
+        for (var _i = 0, _a = this.persistentObjects.keys(); _i < _a.length; _i++) {
+            var key = _a[_i];
+            option = this.persistentObjectsMetadata.getValue(key);
+            instance = this.persistentObjects.getValue(key);
+            if (option.debug)
+                console.log("Trying to save the instance of the object '" + Utils_1.Utils.getClassName(instance) + "' to the path '" + key + "'");
+            if (Utils_1.Utils.isBrowser())
+                localStorage.setItem(key, option.plugin.serialize(instance));
+            else
+                fs.writeFileSync(key, option.plugin.serialize(instance));
+            if (option.debug)
+                console.log("The instance of the object '" + Utils_1.Utils.getClassName(instance) + "' has been saved to the path '" + key + "'");
+        }
+    };
+    /**
+     * Returns the number of class saved
+     */
+    Storage.prototype.getSize = function () {
+        return this.persistentObjects.size();
+    };
+    return Storage;
+}());
+exports.Storage = Storage;
+;
+//@ts-ignore
+if (exports.storage == undefined) {
+    exports.storage = new Storage();
+}
 
 },{"./utils/Map":267,"./utils/Utils":268,"fs":115,"path":257,"process":270}],266:[function(require,module,exports){
-(function (factory) {
-    if (typeof module === "object" && typeof module.exports === "object") {
-        var v = factory(require, exports);
-        if (v !== undefined) module.exports = v;
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+var Map_1 = require("../utils/Map");
+var Utils_1 = require("../utils/Utils");
+var JsonPlugin = /** @class */ (function () {
+    function JsonPlugin(isMinified) {
+        this.minified = isMinified;
     }
-    else if (typeof define === "function" && define.amd) {
-        define(["require", "exports", "../utils/Map"], factory);
-    }
-})(function (require, exports) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-    var Map_1 = require("../utils/Map");
-    var JsonPlugin = /** @class */ (function () {
-        function JsonPlugin(isMinified) {
-            this.minified = isMinified;
-        }
-        JsonPlugin.prototype.init = function () {
-            return new Map_1.Map();
-        };
-        JsonPlugin.prototype.serialize = function (object) {
-            return object.toJson(this.minified);
-        };
-        JsonPlugin.prototype.deserialize = function (serializedObject) {
-            return Map_1.Map.fromJson(serializedObject);
-        };
-        JsonPlugin.prototype.get = function (object, className) {
-            if (object == null)
-                return null;
-            return object.getValue(className);
-        };
-        JsonPlugin.prototype.put = function (object, className, classInstance) {
-            object.put(className, classInstance);
-        };
-        return JsonPlugin;
-    }());
-    exports.JsonPlugin = JsonPlugin;
-    ;
-});
+    JsonPlugin.prototype.init = function () {
+        return new Map_1.Map();
+    };
+    JsonPlugin.prototype.serialize = function (object) {
+        if (Utils_1.Utils.isBrowser())
+            return object.toJson(true);
+        return object.toJson(this.minified);
+    };
+    JsonPlugin.prototype.deserialize = function (serializedObject) {
+        return Map_1.Map.fromJson(serializedObject);
+    };
+    JsonPlugin.prototype.get = function (object, className) {
+        if (object == null)
+            return null;
+        return object.getValue(className);
+    };
+    JsonPlugin.prototype.put = function (object, className, classInstance) {
+        object.put(className, classInstance);
+    };
+    return JsonPlugin;
+}());
+exports.JsonPlugin = JsonPlugin;
+;
 
-},{"../utils/Map":267}],267:[function(require,module,exports){
-(function (factory) {
-    if (typeof module === "object" && typeof module.exports === "object") {
-        var v = factory(require, exports);
-        if (v !== undefined) module.exports = v;
+},{"../utils/Map":267,"../utils/Utils":268}],267:[function(require,module,exports){
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+var Map = /** @class */ (function () {
+    function Map() {
+        this.map = {};
+        this.mapSize = 0;
     }
-    else if (typeof define === "function" && define.amd) {
-        define(["require", "exports"], factory);
-    }
-})(function (require, exports) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-    var Map = /** @class */ (function () {
-        function Map() {
-            this.map = {};
-            this.mapSize = 0;
+    /**
+     *  Puts a key and its value in the map
+     * @param {string} key
+     * @param {any} value
+     */
+    Map.prototype.put = function (key, value) {
+        if (!this.containsKey(key)) {
+            this.mapSize++;
         }
-        /**
-         *  Puts a key and its value in the map
-         * @param {string} key
-         * @param {any} value
-         */
-        Map.prototype.put = function (key, value) {
-            if (!this.containsKey(key)) {
-                this.mapSize++;
+        this.map[key] = value;
+        return true;
+    };
+    /**
+     *  Clears the map
+     */
+    Map.prototype.clear = function () {
+        this.mapSize = 0;
+        this.map = {};
+        return true;
+    };
+    /**
+     *  Returns an array of all the keys stored in the map
+     */
+    Map.prototype.keys = function () {
+        var keys = [];
+        for (var key in this.map) {
+            if (this.map.hasOwnProperty(key)) {
+                keys.push(key);
             }
-            this.map[key] = value;
-            return true;
-        };
-        /**
-         *  Clears the map
-         */
-        Map.prototype.clear = function () {
-            this.mapSize = 0;
-            this.map = {};
-            return true;
-        };
-        /**
-         *  Returns an array of all the keys stored in the map
-         */
-        Map.prototype.keys = function () {
-            var keys = [];
-            for (var key in this.map) {
-                if (this.map.hasOwnProperty(key)) {
-                    keys.push(key);
+        }
+        return keys;
+    };
+    /**
+     *  Returns an array of all the values stored in the map
+     */
+    Map.prototype.values = function () {
+        var values = [];
+        for (var key in this.map) {
+            if (this.map.hasOwnProperty(key)) {
+                values.push(this.map[key]);
+            }
+        }
+        return values;
+    };
+    /**
+     *  Checks if the map is empty or not
+     */
+    Map.prototype.isEmpty = function () {
+        return this.mapSize === 0;
+    };
+    /**
+     *  Removes a key and its value from the map
+     * @param {string} key
+     * @return returns the stored value if not it returns null
+     */
+    Map.prototype.removeKey = function (key) {
+        if (this.containsKey(key)) {
+            this.mapSize--;
+            var value = this.map[key];
+            delete this.map[key];
+            return value;
+        }
+        return null;
+    };
+    /**
+     *  Checks if the map is containing the specified key
+     * @param {string} key
+     */
+    Map.prototype.containsKey = function (key) {
+        return this.map.hasOwnProperty(key);
+    };
+    /**
+     *  Checks if the map is containing the specified value
+     * @param {any} value
+     */
+    Map.prototype.containsValue = function (value) {
+        for (var key in this.map) {
+            if (this.map.hasOwnProperty(key)) {
+                if (this.map[key] === value) {
+                    return true;
                 }
             }
-            return keys;
-        };
-        /**
-         *  Returns an array of all the values stored in the map
-         */
-        Map.prototype.values = function () {
-            var values = [];
-            for (var key in this.map) {
-                if (this.map.hasOwnProperty(key)) {
-                    values.push(this.map[key]);
-                }
-            }
-            return values;
-        };
-        /**
-         *  Checks if the map is empty or not
-         */
-        Map.prototype.isEmpty = function () {
-            return this.mapSize === 0;
-        };
-        /**
-         *  Removes a key and its value from the map
-         * @param {string} key
-         * @return returns the stored value if not it returns null
-         */
-        Map.prototype.removeKey = function (key) {
-            if (this.containsKey(key)) {
-                this.mapSize--;
-                var value = this.map[key];
-                delete this.map[key];
-                return value;
-            }
+        }
+        return false;
+    };
+    /**
+     *  Returns the size of the map
+     */
+    Map.prototype.size = function () {
+        return this.mapSize;
+    };
+    /**
+     *  Returns the value associated to the specified key
+     * @param {string} key
+     * @return returns the value associated if not it returns null
+     */
+    Map.prototype.getValue = function (key) {
+        if (this.containsKey(key)) {
+            return this.map[key];
+        }
+        return null;
+    };
+    /**
+     *  Saves the map to json
+     */
+    Map.prototype.toJson = function (isMinified) {
+        if (!isMinified)
+            return JSON.stringify(this.map, null, 4);
+        else
+            return JSON.stringify(this.map);
+    };
+    /**
+     *  Creates an map from its serialization
+     * @param data serialized map
+     */
+    Map.fromJson = function (serializedHm) {
+        var hm = new Map();
+        var rawObject = JSON.parse(serializedHm);
+        if (rawObject == null)
             return null;
-        };
-        /**
-         *  Checks if the map is containing the specified key
-         * @param {string} key
-         */
-        Map.prototype.containsKey = function (key) {
-            return this.map.hasOwnProperty(key);
-        };
-        /**
-         *  Checks if the map is containing the specified value
-         * @param {any} value
-         */
-        Map.prototype.containsValue = function (value) {
-            for (var key in this.map) {
-                if (this.map.hasOwnProperty(key)) {
-                    if (this.map[key] === value) {
-                        return true;
-                    }
-                }
-            }
-            return false;
-        };
-        /**
-         *  Returns the size of the map
-         */
-        Map.prototype.size = function () {
-            return this.mapSize;
-        };
-        /**
-         *  Returns the value associated to the specified key
-         * @param {string} key
-         * @return returns the value associated if not it returns null
-         */
-        Map.prototype.getValue = function (key) {
-            if (this.containsKey(key)) {
-                return this.map[key];
-            }
-            return null;
-        };
-        /**
-         *  Saves the map to json
-         */
-        Map.prototype.toJson = function (isMinified) {
-            if (!isMinified)
-                return JSON.stringify(this.map, null, 4);
-            else
-                return JSON.stringify(this.map);
-        };
-        /**
-         *  Creates an map from its serialization
-         * @param data serialized map
-         */
-        Map.fromJson = function (serializedHm) {
-            var hm = new Map();
-            var rawObject = JSON.parse(serializedHm);
-            if (rawObject == null)
-                return null;
-            for (var key in rawObject) {
-                hm.put(key, rawObject[key]);
-            }
-            return hm;
-        };
-        return Map;
-    }());
-    exports.Map = Map;
-});
+        for (var key in rawObject) {
+            hm.put(key, rawObject[key]);
+        }
+        return hm;
+    };
+    return Map;
+}());
+exports.Map = Map;
 
 },{}],268:[function(require,module,exports){
-(function (factory) {
-    if (typeof module === "object" && typeof module.exports === "object") {
-        var v = factory(require, exports);
-        if (v !== undefined) module.exports = v;
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+var Utils = /** @class */ (function () {
+    function Utils() {
     }
-    else if (typeof define === "function" && define.amd) {
-        define(["require", "exports"], factory);
-    }
-})(function (require, exports) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-    var Utils = /** @class */ (function () {
-        function Utils() {
-        }
-        /**
-         * Retrieves the class name from a class instance
-         * @param instance class instance
-         */
-        Utils.getClassName = function (instance) {
-            return instance.constructor ? instance.constructor.name : null;
-        };
-        /**
-         * Checks if the library is running on the browser
-         */
-        Utils.isBrowser = function () {
-            return typeof window !== 'undefined' && typeof window.document !== 'undefined';
-        };
-        return Utils;
-    }());
-    exports.Utils = Utils;
-    ;
-});
+    /**
+     * Retrieves the class name from a class instance
+     * @param instance class instance
+     */
+    Utils.getClassName = function (instance) {
+        return instance.constructor ? instance.constructor.name : null;
+    };
+    /**
+     * Checks if the library is running on the browser
+     */
+    Utils.isBrowser = function () {
+        return typeof window !== 'undefined' && typeof window.document !== 'undefined';
+    };
+    return Utils;
+}());
+exports.Utils = Utils;
+;
 
 },{}],269:[function(require,module,exports){
 (function (process){

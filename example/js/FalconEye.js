@@ -1,409 +1,861 @@
 (function(){function r(e,n,t){function o(i,f){if(!n[i]){if(!e[i]){var c="function"==typeof require&&require;if(!f&&c)return c(i,!0);if(u)return u(i,!0);var a=new Error("Cannot find module '"+i+"'");throw a.code="MODULE_NOT_FOUND",a}var p=n[i]={exports:{}};e[i][0].call(p.exports,function(r){var n=e[i][1][r];return o(n||r)},p,p.exports,r,e,n,t)}return n[i].exports}for(var u="function"==typeof require&&require,i=0;i<t.length;i++)o(t[i]);return o}return r})()({1:[function(require,module,exports){
 "use strict";
-var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
+
+function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+var __decorate = void 0 && (void 0).__decorate || function (decorators, target, key, desc) {
+  var c = arguments.length,
+      r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc,
+      d;
+  if ((typeof Reflect === "undefined" ? "undefined" : _typeof(Reflect)) === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);else for (var i = decorators.length - 1; i >= 0; i--) {
+    if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+  }
+  return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
-var __metadata = (this && this.__metadata) || function (k, v) {
-    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+
+var __metadata = void 0 && (void 0).__metadata || function (k, v) {
+  if ((typeof Reflect === "undefined" ? "undefined" : _typeof(Reflect)) === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-Object.defineProperty(exports, "__esModule", { value: true });
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
 var Persistent_1 = require("../node_modules/persistent-typescript/build/Persistent");
-var ConfigProfile = /** @class */ (function () {
-    function ConfigProfile() {
-        this._apiKey = "";
-        this._profileId = "";
-    }
-    Object.defineProperty(ConfigProfile.prototype, "apiKey", {
-        get: function () {
-            return this._apiKey;
-        },
-        set: function (key) {
-            this._apiKey = key;
-        },
-        enumerable: true,
-        configurable: true
-    });
-    Object.defineProperty(ConfigProfile.prototype, "profileId", {
-        get: function () {
-            return this._profileId;
-        },
-        set: function (profileId) {
-            this._profileId = profileId;
-        },
-        enumerable: true,
-        configurable: true
-    });
-    ConfigProfile = __decorate([
-        Persistent_1.Persistent(),
-        __metadata("design:paramtypes", [])
-    ], ConfigProfile);
-    return ConfigProfile;
-}());
+
+var ConfigProfile =
+/** @class */
+function () {
+  function ConfigProfile() {
+    this._apiKey = "";
+    this._profileId = "";
+  }
+
+  Object.defineProperty(ConfigProfile.prototype, "apiKey", {
+    get: function get() {
+      return this._apiKey;
+    },
+    set: function set(key) {
+      this._apiKey = key;
+    },
+    enumerable: true,
+    configurable: true
+  });
+  Object.defineProperty(ConfigProfile.prototype, "profileId", {
+    get: function get() {
+      return this._profileId;
+    },
+    set: function set(profileId) {
+      this._profileId = profileId;
+    },
+    enumerable: true,
+    configurable: true
+  });
+  ConfigProfile = __decorate([Persistent_1.Persistent(), __metadata("design:paramtypes", [])], ConfigProfile);
+  return ConfigProfile;
+}();
+
 exports.ConfigProfile = ConfigProfile;
 
 },{"../node_modules/persistent-typescript/build/Persistent":263}],2:[function(require,module,exports){
 "use strict";
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
+
+var __awaiter = void 0 && (void 0).__awaiter || function (thisArg, _arguments, P, generator) {
+  return new (P || (P = Promise))(function (resolve, reject) {
+    function fulfilled(value) {
+      try {
+        step(generator.next(value));
+      } catch (e) {
+        reject(e);
+      }
+    }
+
+    function rejected(value) {
+      try {
+        step(generator["throw"](value));
+      } catch (e) {
+        reject(e);
+      }
+    }
+
+    function step(result) {
+      result.done ? resolve(result.value) : new P(function (resolve) {
+        resolve(result.value);
+      }).then(fulfilled, rejected);
+    }
+
+    step((generator = generator.apply(thisArg, _arguments || [])).next());
+  });
 };
-var __generator = (this && this.__generator) || function (thisArg, body) {
-    var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g;
-    return g = { next: verb(0), "throw": verb(1), "return": verb(2) }, typeof Symbol === "function" && (g[Symbol.iterator] = function() { return this; }), g;
-    function verb(n) { return function (v) { return step([n, v]); }; }
-    function step(op) {
-        if (f) throw new TypeError("Generator is already executing.");
-        while (_) try {
-            if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
-            if (y = 0, t) op = [op[0] & 2, t.value];
-            switch (op[0]) {
-                case 0: case 1: t = op; break;
-                case 4: _.label++; return { value: op[1], done: false };
-                case 5: _.label++; y = op[1]; op = [0]; continue;
-                case 7: op = _.ops.pop(); _.trys.pop(); continue;
-                default:
-                    if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) { _ = 0; continue; }
-                    if (op[0] === 3 && (!t || (op[1] > t[0] && op[1] < t[3]))) { _.label = op[1]; break; }
-                    if (op[0] === 6 && _.label < t[1]) { _.label = t[1]; t = op; break; }
-                    if (t && _.label < t[2]) { _.label = t[2]; _.ops.push(op); break; }
-                    if (t[2]) _.ops.pop();
-                    _.trys.pop(); continue;
+
+var __generator = void 0 && (void 0).__generator || function (thisArg, body) {
+  var _ = {
+    label: 0,
+    sent: function sent() {
+      if (t[0] & 1) throw t[1];
+      return t[1];
+    },
+    trys: [],
+    ops: []
+  },
+      f,
+      y,
+      t,
+      g;
+  return g = {
+    next: verb(0),
+    "throw": verb(1),
+    "return": verb(2)
+  }, typeof Symbol === "function" && (g[Symbol.iterator] = function () {
+    return this;
+  }), g;
+
+  function verb(n) {
+    return function (v) {
+      return step([n, v]);
+    };
+  }
+
+  function step(op) {
+    if (f) throw new TypeError("Generator is already executing.");
+
+    while (_) {
+      try {
+        if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
+        if (y = 0, t) op = [op[0] & 2, t.value];
+
+        switch (op[0]) {
+          case 0:
+          case 1:
+            t = op;
+            break;
+
+          case 4:
+            _.label++;
+            return {
+              value: op[1],
+              done: false
+            };
+
+          case 5:
+            _.label++;
+            y = op[1];
+            op = [0];
+            continue;
+
+          case 7:
+            op = _.ops.pop();
+
+            _.trys.pop();
+
+            continue;
+
+          default:
+            if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) {
+              _ = 0;
+              continue;
             }
-            op = body.call(thisArg, _);
-        } catch (e) { op = [6, e]; y = 0; } finally { f = t = 0; }
-        if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
+
+            if (op[0] === 3 && (!t || op[1] > t[0] && op[1] < t[3])) {
+              _.label = op[1];
+              break;
+            }
+
+            if (op[0] === 6 && _.label < t[1]) {
+              _.label = t[1];
+              t = op;
+              break;
+            }
+
+            if (t && _.label < t[2]) {
+              _.label = t[2];
+
+              _.ops.push(op);
+
+              break;
+            }
+
+            if (t[2]) _.ops.pop();
+
+            _.trys.pop();
+
+            continue;
+        }
+
+        op = body.call(thisArg, _);
+      } catch (e) {
+        op = [6, e];
+        y = 0;
+      } finally {
+        f = t = 0;
+      }
     }
+
+    if (op[0] & 5) throw op[1];
+    return {
+      value: op[0] ? op[1] : void 0,
+      done: true
+    };
+  }
 };
-Object.defineProperty(exports, "__esModule", { value: true });
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
 var ConfigProfile_1 = require("./ConfigProfile");
+
 var Network_1 = require("./network/Network");
+
 var EventListener_1 = require("./event/EventListener");
-var FalconEye = /** @class */ (function () {
-    function FalconEye(apiKey, address) {
-        this.apiKey = apiKey;
-        this.hasStarted = false;
-        this.eventListener = new EventListener_1.default(this);
-        this.config = new ConfigProfile_1.ConfigProfile();
-        this.network = new Network_1.default(this, address);
-    }
-    FalconEye.prototype.observe = function () {
-        return __awaiter(this, void 0, void 0, function () {
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
-                        if (this.hasStarted)
-                            return [2 /*return*/];
-                        if (!(this.config.apiKey != this.apiKey || this.config.profileId.length === 0)) return [3 /*break*/, 2];
-                        return [4 /*yield*/, this.network.handshake()];
-                    case 1:
-                        _a.sent();
-                        this.config.apiKey = this.apiKey;
-                        this.config.profileId = this.network.getProfileId();
-                        _a.label = 2;
-                    case 2:
-                        this.eventListener.listen();
-                        this.hasStarted = true;
-                        return [2 /*return*/];
-                }
-            });
-        });
-    };
-    FalconEye.prototype.getAPIKey = function () {
-        return this.apiKey;
-    };
-    FalconEye.prototype.getConfig = function () {
-        return this.config;
-    };
-    return FalconEye;
-}());
+
+var FalconEye =
+/** @class */
+function () {
+  function FalconEye(apiKey, address) {
+    this.apiKey = apiKey;
+    this.hasStarted = false;
+    this.eventListener = new EventListener_1["default"](this);
+    this.config = new ConfigProfile_1.ConfigProfile();
+    this.network = new Network_1["default"](this, address);
+  }
+
+  FalconEye.prototype.observe = function () {
+    return __awaiter(this, void 0, void 0, function () {
+      return __generator(this, function (_a) {
+        switch (_a.label) {
+          case 0:
+            if (this.hasStarted) return [2
+            /*return*/
+            ];
+            if (!(this.config.apiKey != this.apiKey || this.config.profileId.length === 0)) return [3
+            /*break*/
+            , 2];
+            return [4
+            /*yield*/
+            , this.network.handshake()];
+
+          case 1:
+            _a.sent();
+
+            this.config.apiKey = this.apiKey;
+            this.config.profileId = this.network.getProfileId();
+            _a.label = 2;
+
+          case 2:
+            this.eventListener.listen();
+            this.hasStarted = true;
+            return [2
+            /*return*/
+            ];
+        }
+      });
+    });
+  };
+
+  FalconEye.prototype.getAPIKey = function () {
+    return this.apiKey;
+  };
+
+  FalconEye.prototype.getConfig = function () {
+    return this.config;
+  };
+
+  return FalconEye;
+}();
+
 exports.FalconEye = FalconEye;
 var fe = new FalconEye("adkfdsnfsnfdjnfdsjfsfssfd", "http://localhost:3000/");
 fe.observe();
 
 },{"./ConfigProfile":1,"./event/EventListener":3,"./network/Network":7}],3:[function(require,module,exports){
 "use strict";
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
+
+var __awaiter = void 0 && (void 0).__awaiter || function (thisArg, _arguments, P, generator) {
+  return new (P || (P = Promise))(function (resolve, reject) {
+    function fulfilled(value) {
+      try {
+        step(generator.next(value));
+      } catch (e) {
+        reject(e);
+      }
+    }
+
+    function rejected(value) {
+      try {
+        step(generator["throw"](value));
+      } catch (e) {
+        reject(e);
+      }
+    }
+
+    function step(result) {
+      result.done ? resolve(result.value) : new P(function (resolve) {
+        resolve(result.value);
+      }).then(fulfilled, rejected);
+    }
+
+    step((generator = generator.apply(thisArg, _arguments || [])).next());
+  });
 };
-var __generator = (this && this.__generator) || function (thisArg, body) {
-    var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g;
-    return g = { next: verb(0), "throw": verb(1), "return": verb(2) }, typeof Symbol === "function" && (g[Symbol.iterator] = function() { return this; }), g;
-    function verb(n) { return function (v) { return step([n, v]); }; }
-    function step(op) {
-        if (f) throw new TypeError("Generator is already executing.");
-        while (_) try {
-            if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
-            if (y = 0, t) op = [op[0] & 2, t.value];
-            switch (op[0]) {
-                case 0: case 1: t = op; break;
-                case 4: _.label++; return { value: op[1], done: false };
-                case 5: _.label++; y = op[1]; op = [0]; continue;
-                case 7: op = _.ops.pop(); _.trys.pop(); continue;
-                default:
-                    if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) { _ = 0; continue; }
-                    if (op[0] === 3 && (!t || (op[1] > t[0] && op[1] < t[3]))) { _.label = op[1]; break; }
-                    if (op[0] === 6 && _.label < t[1]) { _.label = t[1]; t = op; break; }
-                    if (t && _.label < t[2]) { _.label = t[2]; _.ops.push(op); break; }
-                    if (t[2]) _.ops.pop();
-                    _.trys.pop(); continue;
+
+var __generator = void 0 && (void 0).__generator || function (thisArg, body) {
+  var _ = {
+    label: 0,
+    sent: function sent() {
+      if (t[0] & 1) throw t[1];
+      return t[1];
+    },
+    trys: [],
+    ops: []
+  },
+      f,
+      y,
+      t,
+      g;
+  return g = {
+    next: verb(0),
+    "throw": verb(1),
+    "return": verb(2)
+  }, typeof Symbol === "function" && (g[Symbol.iterator] = function () {
+    return this;
+  }), g;
+
+  function verb(n) {
+    return function (v) {
+      return step([n, v]);
+    };
+  }
+
+  function step(op) {
+    if (f) throw new TypeError("Generator is already executing.");
+
+    while (_) {
+      try {
+        if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
+        if (y = 0, t) op = [op[0] & 2, t.value];
+
+        switch (op[0]) {
+          case 0:
+          case 1:
+            t = op;
+            break;
+
+          case 4:
+            _.label++;
+            return {
+              value: op[1],
+              done: false
+            };
+
+          case 5:
+            _.label++;
+            y = op[1];
+            op = [0];
+            continue;
+
+          case 7:
+            op = _.ops.pop();
+
+            _.trys.pop();
+
+            continue;
+
+          default:
+            if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) {
+              _ = 0;
+              continue;
             }
-            op = body.call(thisArg, _);
-        } catch (e) { op = [6, e]; y = 0; } finally { f = t = 0; }
-        if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
+
+            if (op[0] === 3 && (!t || op[1] > t[0] && op[1] < t[3])) {
+              _.label = op[1];
+              break;
+            }
+
+            if (op[0] === 6 && _.label < t[1]) {
+              _.label = t[1];
+              t = op;
+              break;
+            }
+
+            if (t && _.label < t[2]) {
+              _.label = t[2];
+
+              _.ops.push(op);
+
+              break;
+            }
+
+            if (t[2]) _.ops.pop();
+
+            _.trys.pop();
+
+            continue;
+        }
+
+        op = body.call(thisArg, _);
+      } catch (e) {
+        op = [6, e];
+        y = 0;
+      } finally {
+        f = t = 0;
+      }
     }
+
+    if (op[0] & 5) throw op[1];
+    return {
+      value: op[0] ? op[1] : void 0,
+      done: true
+    };
+  }
 };
-Object.defineProperty(exports, "__esModule", { value: true });
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
 var FalconButtonEvent_1 = require("./FalconButtonEvent");
+
 var FalconWheelEvent_1 = require("./FalconWheelEvent");
-var EventListener = /** @class */ (function () {
-    function EventListener(fe) {
-        this.falconEye = fe;
-    }
-    EventListener.prototype.listen = function () {
-        this.listenClickEvent();
-        this.listenWheelEvent();
-    };
-    EventListener.prototype.listenClickEvent = function () {
-        return __awaiter(this, void 0, void 0, function () {
-            return __generator(this, function (_a) {
-                window.addEventListener("click", function (ev) {
-                    var be = new FalconButtonEvent_1.default(ev.screenX, ev.screenY, ev.clientX, ev.clientY, ev.button);
-                    console.table(be);
-                });
-                return [2 /*return*/];
-            });
+
+var EventListener =
+/** @class */
+function () {
+  function EventListener(fe) {
+    this.falconEye = fe;
+  }
+
+  EventListener.prototype.listen = function () {
+    this.listenClickEvent();
+    this.listenWheelEvent();
+  };
+
+  EventListener.prototype.listenClickEvent = function () {
+    return __awaiter(this, void 0, void 0, function () {
+      return __generator(this, function (_a) {
+        window.addEventListener("click", function (ev) {
+          var be = new FalconButtonEvent_1["default"](ev.screenX, ev.screenY, ev.clientX, ev.clientY, ev.button);
+          console.table(be);
         });
-    };
-    EventListener.prototype.listenWheelEvent = function () {
-        return __awaiter(this, void 0, void 0, function () {
-            return __generator(this, function (_a) {
-                window.addEventListener("wheel", function (ev) {
-                    var me = new FalconWheelEvent_1.default(ev.screenX, ev.screenY, ev.clientX, ev.clientY, ev.button, ev.deltaMode, ev.deltaX, ev.deltaY, ev.deltaZ);
-                    console.table(me);
-                });
-                return [2 /*return*/];
-            });
+        return [2
+        /*return*/
+        ];
+      });
+    });
+  };
+
+  EventListener.prototype.listenWheelEvent = function () {
+    return __awaiter(this, void 0, void 0, function () {
+      return __generator(this, function (_a) {
+        window.addEventListener("wheel", function (ev) {
+          var me = new FalconWheelEvent_1["default"](ev.screenX, ev.screenY, ev.clientX, ev.clientY, ev.button, ev.deltaMode, ev.deltaX, ev.deltaY, ev.deltaZ);
+          console.table(me);
         });
-    };
-    return EventListener;
-}());
-exports.default = EventListener;
+        return [2
+        /*return*/
+        ];
+      });
+    });
+  };
+
+  return EventListener;
+}();
+
+exports["default"] = EventListener;
 
 },{"./FalconButtonEvent":4,"./FalconWheelEvent":6}],4:[function(require,module,exports){
 "use strict";
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-        return extendStatics(d, b);
+
+var __extends = void 0 && (void 0).__extends || function () {
+  var _extendStatics = function extendStatics(d, b) {
+    _extendStatics = Object.setPrototypeOf || {
+      __proto__: []
+    } instanceof Array && function (d, b) {
+      d.__proto__ = b;
+    } || function (d, b) {
+      for (var p in b) {
+        if (b.hasOwnProperty(p)) d[p] = b[p];
+      }
     };
-    return function (d, b) {
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-Object.defineProperty(exports, "__esModule", { value: true });
-var FalconEvent_1 = require("./FalconEvent");
-var FalconButtonEvent = /** @class */ (function (_super) {
-    __extends(FalconButtonEvent, _super);
-    function FalconButtonEvent(screenX, screenY, x, y, buttonType) {
-        var _this = _super.call(this) || this;
-        _this.screenX = screenX;
-        _this.screenY = screenY;
-        _this.x = x;
-        _this.y = y;
-        _this.buttonType = buttonType;
-        return _this;
+
+    return _extendStatics(d, b);
+  };
+
+  return function (d, b) {
+    _extendStatics(d, b);
+
+    function __() {
+      this.constructor = d;
     }
-    FalconButtonEvent.prototype.getScreenX = function () {
-        return this.screenX;
-    };
-    FalconButtonEvent.prototype.getScreenY = function () {
-        return this.screenY;
-    };
-    FalconButtonEvent.prototype.getX = function () {
-        return this.x;
-    };
-    FalconButtonEvent.prototype.getY = function () {
-        return this.y;
-    };
-    FalconButtonEvent.prototype.getButtonType = function () {
-        return this.buttonType;
-    };
-    return FalconButtonEvent;
-}(FalconEvent_1.default));
-exports.default = FalconButtonEvent;
+
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+  };
+}();
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var FalconEvent_1 = require("./FalconEvent");
+
+var FalconButtonEvent =
+/** @class */
+function (_super) {
+  __extends(FalconButtonEvent, _super);
+
+  function FalconButtonEvent(screenX, screenY, x, y, buttonType) {
+    var _this = _super.call(this) || this;
+
+    _this.screenX = screenX;
+    _this.screenY = screenY;
+    _this.x = x;
+    _this.y = y;
+    _this.buttonType = buttonType;
+    return _this;
+  }
+
+  FalconButtonEvent.prototype.getScreenX = function () {
+    return this.screenX;
+  };
+
+  FalconButtonEvent.prototype.getScreenY = function () {
+    return this.screenY;
+  };
+
+  FalconButtonEvent.prototype.getX = function () {
+    return this.x;
+  };
+
+  FalconButtonEvent.prototype.getY = function () {
+    return this.y;
+  };
+
+  FalconButtonEvent.prototype.getButtonType = function () {
+    return this.buttonType;
+  };
+
+  return FalconButtonEvent;
+}(FalconEvent_1["default"]);
+
+exports["default"] = FalconButtonEvent;
 
 },{"./FalconEvent":5}],5:[function(require,module,exports){
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-var FalconEvent = /** @class */ (function () {
-    function FalconEvent() {
-        this.maxScreenX = screen.width;
-        this.maxScreenY = screen.height;
-        this.maxX = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
-        this.maxY = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
-        this.currentPath = window.location.pathname;
-        this.date = new Date();
-    }
-    FalconEvent.prototype.getMaxScreenX = function () {
-        return this.maxScreenX;
-    };
-    FalconEvent.prototype.getMaxScreenY = function () {
-        return this.maxScreenY;
-    };
-    FalconEvent.prototype.getMaxX = function () {
-        return this.maxX;
-    };
-    FalconEvent.prototype.getMaxY = function () {
-        return this.maxY;
-    };
-    FalconEvent.prototype.getCurrentPath = function () {
-        return this.currentPath;
-    };
-    FalconEvent.prototype.getDate = function () {
-        return this.date;
-    };
-    return FalconEvent;
-}());
-exports.default = FalconEvent;
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var FalconEvent =
+/** @class */
+function () {
+  function FalconEvent() {
+    this.maxScreenX = screen.width;
+    this.maxScreenY = screen.height;
+    this.maxX = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
+    this.maxY = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
+    this.currentPath = window.location.pathname;
+    this.date = new Date();
+  }
+
+  FalconEvent.prototype.getMaxScreenX = function () {
+    return this.maxScreenX;
+  };
+
+  FalconEvent.prototype.getMaxScreenY = function () {
+    return this.maxScreenY;
+  };
+
+  FalconEvent.prototype.getMaxX = function () {
+    return this.maxX;
+  };
+
+  FalconEvent.prototype.getMaxY = function () {
+    return this.maxY;
+  };
+
+  FalconEvent.prototype.getCurrentPath = function () {
+    return this.currentPath;
+  };
+
+  FalconEvent.prototype.getDate = function () {
+    return this.date;
+  };
+
+  return FalconEvent;
+}();
+
+exports["default"] = FalconEvent;
 
 },{}],6:[function(require,module,exports){
 "use strict";
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-        return extendStatics(d, b);
+
+var __extends = void 0 && (void 0).__extends || function () {
+  var _extendStatics = function extendStatics(d, b) {
+    _extendStatics = Object.setPrototypeOf || {
+      __proto__: []
+    } instanceof Array && function (d, b) {
+      d.__proto__ = b;
+    } || function (d, b) {
+      for (var p in b) {
+        if (b.hasOwnProperty(p)) d[p] = b[p];
+      }
     };
-    return function (d, b) {
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-Object.defineProperty(exports, "__esModule", { value: true });
-var FalconButtonEvent_1 = require("./FalconButtonEvent");
-var FalconWheelEvent = /** @class */ (function (_super) {
-    __extends(FalconWheelEvent, _super);
-    function FalconWheelEvent(screenX, screenY, x, y, buttonType, deltaMode, deltaX, deltaY, deltaZ) {
-        var _this = _super.call(this, screenX, screenY, x, y, buttonType) || this;
-        _this.deltaMode = deltaMode;
-        _this.deltaX = deltaX;
-        _this.deltaY = deltaY;
-        _this.deltaZ = deltaZ;
-        return _this;
+
+    return _extendStatics(d, b);
+  };
+
+  return function (d, b) {
+    _extendStatics(d, b);
+
+    function __() {
+      this.constructor = d;
     }
-    FalconWheelEvent.prototype.getDeltaMode = function () {
-        return this.deltaMode;
-    };
-    FalconWheelEvent.prototype.getDeltaX = function () {
-        return this.deltaX;
-    };
-    FalconWheelEvent.prototype.getDeltaY = function () {
-        return this.deltaY;
-    };
-    FalconWheelEvent.prototype.getDeltaZ = function () {
-        return this.deltaZ;
-    };
-    return FalconWheelEvent;
-}(FalconButtonEvent_1.default));
-exports.default = FalconWheelEvent;
+
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+  };
+}();
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var FalconButtonEvent_1 = require("./FalconButtonEvent");
+
+var FalconWheelEvent =
+/** @class */
+function (_super) {
+  __extends(FalconWheelEvent, _super);
+
+  function FalconWheelEvent(screenX, screenY, x, y, buttonType, deltaMode, deltaX, deltaY, deltaZ) {
+    var _this = _super.call(this, screenX, screenY, x, y, buttonType) || this;
+
+    _this.deltaMode = deltaMode;
+    _this.deltaX = deltaX;
+    _this.deltaY = deltaY;
+    _this.deltaZ = deltaZ;
+    return _this;
+  }
+
+  FalconWheelEvent.prototype.getDeltaMode = function () {
+    return this.deltaMode;
+  };
+
+  FalconWheelEvent.prototype.getDeltaX = function () {
+    return this.deltaX;
+  };
+
+  FalconWheelEvent.prototype.getDeltaY = function () {
+    return this.deltaY;
+  };
+
+  FalconWheelEvent.prototype.getDeltaZ = function () {
+    return this.deltaZ;
+  };
+
+  return FalconWheelEvent;
+}(FalconButtonEvent_1["default"]);
+
+exports["default"] = FalconWheelEvent;
 
 },{"./FalconButtonEvent":4}],7:[function(require,module,exports){
 "use strict";
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
+
+var __awaiter = void 0 && (void 0).__awaiter || function (thisArg, _arguments, P, generator) {
+  return new (P || (P = Promise))(function (resolve, reject) {
+    function fulfilled(value) {
+      try {
+        step(generator.next(value));
+      } catch (e) {
+        reject(e);
+      }
+    }
+
+    function rejected(value) {
+      try {
+        step(generator["throw"](value));
+      } catch (e) {
+        reject(e);
+      }
+    }
+
+    function step(result) {
+      result.done ? resolve(result.value) : new P(function (resolve) {
+        resolve(result.value);
+      }).then(fulfilled, rejected);
+    }
+
+    step((generator = generator.apply(thisArg, _arguments || [])).next());
+  });
 };
-var __generator = (this && this.__generator) || function (thisArg, body) {
-    var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g;
-    return g = { next: verb(0), "throw": verb(1), "return": verb(2) }, typeof Symbol === "function" && (g[Symbol.iterator] = function() { return this; }), g;
-    function verb(n) { return function (v) { return step([n, v]); }; }
-    function step(op) {
-        if (f) throw new TypeError("Generator is already executing.");
-        while (_) try {
-            if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
-            if (y = 0, t) op = [op[0] & 2, t.value];
-            switch (op[0]) {
-                case 0: case 1: t = op; break;
-                case 4: _.label++; return { value: op[1], done: false };
-                case 5: _.label++; y = op[1]; op = [0]; continue;
-                case 7: op = _.ops.pop(); _.trys.pop(); continue;
-                default:
-                    if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) { _ = 0; continue; }
-                    if (op[0] === 3 && (!t || (op[1] > t[0] && op[1] < t[3]))) { _.label = op[1]; break; }
-                    if (op[0] === 6 && _.label < t[1]) { _.label = t[1]; t = op; break; }
-                    if (t && _.label < t[2]) { _.label = t[2]; _.ops.push(op); break; }
-                    if (t[2]) _.ops.pop();
-                    _.trys.pop(); continue;
+
+var __generator = void 0 && (void 0).__generator || function (thisArg, body) {
+  var _ = {
+    label: 0,
+    sent: function sent() {
+      if (t[0] & 1) throw t[1];
+      return t[1];
+    },
+    trys: [],
+    ops: []
+  },
+      f,
+      y,
+      t,
+      g;
+  return g = {
+    next: verb(0),
+    "throw": verb(1),
+    "return": verb(2)
+  }, typeof Symbol === "function" && (g[Symbol.iterator] = function () {
+    return this;
+  }), g;
+
+  function verb(n) {
+    return function (v) {
+      return step([n, v]);
+    };
+  }
+
+  function step(op) {
+    if (f) throw new TypeError("Generator is already executing.");
+
+    while (_) {
+      try {
+        if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
+        if (y = 0, t) op = [op[0] & 2, t.value];
+
+        switch (op[0]) {
+          case 0:
+          case 1:
+            t = op;
+            break;
+
+          case 4:
+            _.label++;
+            return {
+              value: op[1],
+              done: false
+            };
+
+          case 5:
+            _.label++;
+            y = op[1];
+            op = [0];
+            continue;
+
+          case 7:
+            op = _.ops.pop();
+
+            _.trys.pop();
+
+            continue;
+
+          default:
+            if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) {
+              _ = 0;
+              continue;
             }
-            op = body.call(thisArg, _);
-        } catch (e) { op = [6, e]; y = 0; } finally { f = t = 0; }
-        if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
+
+            if (op[0] === 3 && (!t || op[1] > t[0] && op[1] < t[3])) {
+              _.label = op[1];
+              break;
+            }
+
+            if (op[0] === 6 && _.label < t[1]) {
+              _.label = t[1];
+              t = op;
+              break;
+            }
+
+            if (t && _.label < t[2]) {
+              _.label = t[2];
+
+              _.ops.push(op);
+
+              break;
+            }
+
+            if (t[2]) _.ops.pop();
+
+            _.trys.pop();
+
+            continue;
+        }
+
+        op = body.call(thisArg, _);
+      } catch (e) {
+        op = [6, e];
+        y = 0;
+      } finally {
+        f = t = 0;
+      }
     }
+
+    if (op[0] & 5) throw op[1];
+    return {
+      value: op[0] ? op[1] : void 0,
+      done: true
+    };
+  }
 };
-Object.defineProperty(exports, "__esModule", { value: true });
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
 var request = require("request-promise");
-var Network = /** @class */ (function () {
-    function Network(falconEye, address) {
-        this.falconEye = falconEye;
-        this.address = address;
-        this.profileId = "";
-    }
-    Network.prototype.handshake = function () {
-        return __awaiter(this, void 0, void 0, function () {
-            var This;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
-                        This = this;
-                        return [4 /*yield*/, request({
-                                method: 'POST',
-                                uri: this.address + (this.address.slice(-1) === '/' ? "" : "/") + "connect/",
-                                body: {
-                                    apikey: this.falconEye.getAPIKey()
-                                },
-                                json: true
-                            })
-                                .then(function (parsedBody) {
-                                This.profileId = parsedBody.profileid;
-                            })
-                                .catch(function (err) {
-                                console.error("[FalconEye] Failed to handshake the server ! " + err);
-                            })];
-                    case 1:
-                        _a.sent();
-                        return [2 /*return*/];
-                }
-            });
-        });
-    };
-    Network.prototype.getProfileId = function () {
-        return this.profileId;
-    };
-    return Network;
-}());
-exports.default = Network;
+
+var Network =
+/** @class */
+function () {
+  function Network(falconEye, address) {
+    this.falconEye = falconEye;
+    this.address = address;
+    this.profileId = falconEye.getConfig().profileId;
+  }
+
+  Network.prototype.handshake = function () {
+    return __awaiter(this, void 0, void 0, function () {
+      var This;
+      return __generator(this, function (_a) {
+        switch (_a.label) {
+          case 0:
+            This = this;
+            return [4
+            /*yield*/
+            , request({
+              method: 'POST',
+              uri: this.address + (this.address.slice(-1) === '/' ? "" : "/") + "connect/",
+              body: {
+                apikey: this.falconEye.getAPIKey()
+              },
+              json: true
+            }).then(function (parsedBody) {
+              This.profileId = parsedBody.profileid;
+            })["catch"](function (err) {
+              console.error("[FalconEye] Failed to handshake the server ! " + err);
+            })];
+
+          case 1:
+            _a.sent();
+
+            return [2
+            /*return*/
+            ];
+        }
+      });
+    });
+  };
+
+  Network.prototype.getProfileId = function () {
+    return this.profileId;
+  };
+
+  return Network;
+}();
+
+exports["default"] = Network;
 
 },{"request-promise":302}],8:[function(require,module,exports){
 'use strict';

@@ -1,5 +1,6 @@
 import { FalconEye } from "../FalconEye";
 import * as request from "request-promise";
+import { Error } from "../error/Error";
 
 export default class Network {
 
@@ -26,11 +27,8 @@ export default class Network {
             if (code === "00") {
                 this.falconEye.getConfig().profileId = parsedBody.data.session;
                 return true;
-            } else if (code === "01") {
-                console.error("[FalconEye] The specified API-KEY is not valid !");
-            } else {
-                console.error("[FalconEye] This shouldn't happen");
             }
+            console.log(Error.generateFromCode(code));
             return false;
         })
         .catch((err: any) => {
@@ -55,11 +53,9 @@ export default class Network {
             let code = parsedBody.code;
 
             console.log(parsedBody);
-            if (code === "00") {
+            if (code === "00")
                 return true;
-            } else if (code === "02") {
-                console.error("[FalconEye] You are not authenticated");
-            }
+            console.log(Error.generateFromCode(code));
             return false;
         })
         .catch((err: any) => {

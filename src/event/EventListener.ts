@@ -39,13 +39,13 @@ export default class EventListener {
         window.addEventListener("keyup", (ev: KeyboardEvent) => {
             let ke: FalconKeyboardEvent = new FalconKeyboardEvent(ev.key, ev.code, KeyStatus.KEYUP);
 
-            console.log(ke);
+            console.table(ke);
             this.falconEye.getStorage().storeEvent(ke);
         });
         window.addEventListener("keydown", (ev: KeyboardEvent) => {
             let ke: FalconKeyboardEvent = new FalconKeyboardEvent(ev.key, ev.code, KeyStatus.KEYDOWN);
 
-            console.log(ke);
+            console.table(ke);
             this.falconEye.getStorage().storeEvent(ke);
         });
     }

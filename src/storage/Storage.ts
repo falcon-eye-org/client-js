@@ -3,6 +3,7 @@ import FalconEvent from "../event/FalconEvent";
 import FalconButtonEvent from "../event/FalconButtonEvent";
 import FalconWheelEvent from "../event/FalconWheelEvent";
 import Network from "../network/Network";
+import FalconKeyboardEvent from "../event/FalconKeyboardEvent";
 
 export class Storage {
     private falconEye: FalconEye;
@@ -22,6 +23,8 @@ export class Storage {
             this.packets.push({type: "wheel", data: event});
         } else if (event instanceof FalconButtonEvent) {
             this.packets.push({type: "button", data: event});
+        } else if (event instanceof FalconKeyboardEvent) {
+            this.packets.push({type: "keyboard", data: event});
         }
     }
 }

@@ -9,22 +9,32 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(express.static(__dirname));
 
+app.use(function(req, res, next) {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    next();
+});
+
 app.get('/', function (req, res) {
     res.sendFile(__dirname + '/html/index.html');
 });
 
-app.post('/connect/', function(req, res) {
-    let apikey = req.body.apikey;
+// app.post('/connect/', function(req, res) {
+//     let apikey = req.body.apikey;
 
-    if (apikey == undefined) {
-        res.send({code: 400, error: "Wrong API-Key"});
-        return;
-    }
-    res.send({code: 200, profileid: generateGUID()});
-});
+//     if (apikey == undefined) {
+//         res.send({code: 400, error: "Wrong API-Key"});
+//         return;
+//     }
+//     res.send({code: 200, profileid: generateGUID()});
+// });
 
-app.listen(3000, function () {
-  console.log('[FalconEye] The example server is now running on http://localhost:3000 !')
+// app.post('/event/', function(req, res) {
+//     res.send({code: 200});
+// });
+
+app.listen(2222, function () {
+  console.log('[FalconEye] The example server is now running on http://localhost:2222/ !')
 });
 
 function generateGUID() {

@@ -1,38 +1,66 @@
 import { FalconEye } from "../FalconEye";
 import * as request from "request-promise";
+import { Error } from "../error/Error";
 
 export default class Network {
 
     private falconEye: FalconEye;
     private address: string;
-    private profileId: string;
 
     constructor(falconEye: FalconEye, address: string) {
         this.falconEye = falconEye;
-        this.address = address;
-        this.profileId = falconEye.getConfig().profileId;
+        this.address = address + (address.slice(-1) === '/' ? "" : "/");
     }
 
-    public async handshake(): Promise<void> {
-        let This = this;
-
-        await request({
+    public async handshake(): Promise<boolean> {
+        return request({
             method: 'POST',
-            uri: this.address + (this.address.slice(-1) === '/' ? "" : "/") +  "connect/",
+            uri: this.address + "connect/",
             body: {
-                apikey: this.falconEye.getAPIKey()
+                apiKey: this.falconEye.getConfig().apiKey
             },
             json: true
         })
         .then((parsedBody: any) => {
-            This.profileId = parsedBody.profileid;
+            let code = parsedBody.code;
+
+            if (code === "00") {
+                this.falconEye.getConfig().profileId = parsedBody.data.session;
+                return true;
+            }
+            console.log(Error.generateFromCode(code));
+            return false;
         })
         .catch((err: any) => {
             console.error("[FalconEye] Failed to handshake the server ! " + err);
+            return false;
         });
     }
 
-    public getProfileId(): string {
-        return this.profileId;
+    public async sendEvents(eventArray: any[]): Promise<boolean> {
+        return request({
+            method: 'POST',
+            uri: this.address + "event/",
+            headers: {
+                authorization: this.falconEye.getConfig().profileId
+            },
+            body: {
+                event: eventArray
+            },
+            json: true
+        })
+        .then((parsedBody: any) => {
+            let code = parsedBody.code;
+
+            console.log(parsedBody);
+            if (code === "00")
+                return true;
+            console.log(Error.generateFromCode(code));
+            return false;
+        })
+        .catch((err: any) => {
+            console.error("[FalconEye] Failed to send the events to the server ! " + err);
+            return false;
+        });
     }
 }

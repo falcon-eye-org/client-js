@@ -6,8 +6,8 @@
   "types": "./dist/FalconEye.d.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "tsc && browserify ./dist/FalconEye.js -o ./example/js/FalconEye.js",
-    "build-dist": "tsc && browserify ./dist/FalconEye.js -o ./example/js/FalconEye.js -t [ babelify --presets [ @babel/preset-env ] --plugins [ babel-plugin-transform-class-properties ] ] && uglifyjs ./example/js/FalconEye.js -o ./example/js/FalconEye.min.js",
+    "build": "tsc && browserify ./build/FalconEye.js -o ./example/js/FalconEye.js",
+    "build-dist": "mkdir dist; tsc && browserify ./build/FalconEye.js -o ./example/js/FalconEye.js -t [ babelify --presets [ @babel/preset-env ] --plugins [ babel-plugin-transform-class-properties ] ] && uglifyjs ./example/js/FalconEye.js -o ./example/js/FalconEye.min.js && cp ./example/js/FalconEye.js ./dist/FalconEye.js && cp ./example/js/FalconEye.min.js ./dist/FalconEye.min.js",
     "server": "node ./example/server.js"
   },
   "repository": {

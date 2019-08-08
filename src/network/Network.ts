@@ -1,5 +1,4 @@
 import { FalconEye } from "../FalconEye";
-// import * as request from "request-promise";
 import { Error } from "../error/Error";
 import * as superagent from "superagent";
 
@@ -31,7 +30,7 @@ export default class Network {
         })
         .catch((err: any) => {
             console.error("[FalconEye] Failed to handshake the server ! " + err);
-            return true;
+            return false;
         });
     }
 

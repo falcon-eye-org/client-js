@@ -61,6 +61,5 @@ typings/
 .next
 
 # Transpiled file
-
-dist/**/**
+build/
 example/js/FalconEye.js

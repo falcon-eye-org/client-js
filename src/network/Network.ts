@@ -1,6 +1,6 @@
 import { FalconEye } from "../FalconEye";
-import * as request from "request-promise";
 import { Error } from "../error/Error";
+import * as superagent from "superagent";
 
 export default class Network {
 
@@ -13,15 +13,12 @@ export default class Network {
     }
 
     public async handshake(): Promise<boolean> {
-        return request({
-            method: 'POST',
-            uri: this.address + "connect/",
-            body: {
-                apiKey: this.falconEye.getConfig().apiKey
-            },
-            json: true
-        })
-        .then((parsedBody: any) => {
+        return superagent
+        .post(this.address + "connect/")
+        .send({ apiKey: this.falconEye.getConfig().apiKey })
+        .set("accept", "json")
+        .then((res: any) => {
+            let parsedBody = res.body;
             let code = parsedBody.code;
 
             if (code === "00") {
@@ -38,21 +35,15 @@ export default class Network {
     }
 
     public async sendEvents(eventArray: any[]): Promise<boolean> {
-        return request({
-            method: 'POST',
-            uri: this.address + "event/",
-            headers: {
-                authorization: this.falconEye.getConfig().profileId
-            },
-            body: {
-                event: eventArray
-            },
-            json: true
-        })
-        .then((parsedBody: any) => {
+        return superagent
+        .post(this.address + "event/")
+        .send({ apiKey: this.falconEye.getConfig().apiKey })
+        .set("accept", "json")
+        .set("authorization", this.falconEye.getConfig().profileId)
+        .then((res: any) => {
+            let parsedBody = res.body;
             let code = parsedBody.code;
 
-            console.log(parsedBody);
             if (code === "00")
                 return true;
             console.log(Error.generateFromCode(code));

@@ -37,7 +37,7 @@ export default class Network {
     public async sendEvents(eventArray: any[]): Promise<boolean> {
         return superagent
         .post(this.address + "event/")
-        .send({ apiKey: this.falconEye.getConfig().apiKey })
+        .send({ event: eventArray })
         .set("accept", "json")
         .set("authorization", this.falconEye.getConfig().profileId)
         .then((res: any) => {

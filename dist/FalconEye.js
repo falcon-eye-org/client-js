@@ -279,6 +279,8 @@ function () {
 exports.FalconEye = FalconEye;
 var fe = new FalconEye("KEY", "http://localhost:3000/");
 fe.observe();
+var ua = window.navigator.userAgent;
+console.log(ua);
 
 },{"./ConfigProfile":1,"./event/EventListener":4,"./network/Network":10,"./storage/Storage":11}],3:[function(require,module,exports){
 "use strict";
@@ -963,7 +965,7 @@ var __generator = void 0 && (void 0).__generator || function (thisArg, body) {
 
 Object.defineProperty(exports, "__esModule", {
   value: true
-}); // import * as request from "request-promise";
+});
 
 var Error_1 = require("../error/Error");
 
@@ -999,7 +1001,7 @@ function () {
           return false;
         })["catch"](function (err) {
           console.error("[FalconEye] Failed to handshake the server ! " + err);
-          return true;
+          return false;
         })];
       });
     });

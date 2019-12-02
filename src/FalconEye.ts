@@ -53,3 +53,6 @@ let fe: FalconEye = new FalconEye("KEY", "http://localhost:3000/");
 
 fe.observe();
 
+var ua = window.navigator.userAgent;
+
+console.log(ua);
